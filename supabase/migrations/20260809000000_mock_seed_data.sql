@@ -15,15 +15,15 @@ INSERT INTO public.events (title, description, event_type, image_url, event_date
   ('Introduction to Renewable Energy Systems', 'A technical seminar on solar and wind energy integration into industrial power systems, led by an industry professional.', 'seminar', 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1200&auto=format&fit=crop', '2026-04-12', 'completed');
 
 -- 2. Gallery images (event photos)
-INSERT INTO public.gallery_images (image_url, caption) VALUES
-  ('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop', 'Robotics Challenge — final round'),
-  ('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=800&auto=format&fit=crop', 'Automation Bootcamp — PLC session'),
-  ('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop', 'AGM 2026 — committee address'),
-  ('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop', 'Site visit — substation walkthrough'),
-  ('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800&auto=format&fit=crop', 'Welcome Social — new member mixer'),
-  ('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop', 'Renewable Energy seminar — Q&A'),
-  ('https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=800&auto=format&fit=crop', 'Robotics Challenge — team briefing'),
-  ('https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?q=80&w=800&auto=format&fit=crop', 'Automation Bootcamp — group photo');
+INSERT INTO public.gallery_images (image_url, caption, photographer) VALUES
+  ('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop', 'Robotics Challenge — final round', 'Kavindu Perera'),
+  ('https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?q=80&w=800&auto=format&fit=crop', 'Automation Bootcamp — PLC session', 'Dulan Wijesinghe'),
+  ('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=800&auto=format&fit=crop', 'AGM 2026 — committee address', 'Dulan Wijesinghe'),
+  ('https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop', 'Site visit — substation walkthrough', 'Ishara Fernando'),
+  ('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800&auto=format&fit=crop', 'Welcome Social — new member mixer', 'Kavindu Perera'),
+  ('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=800&auto=format&fit=crop', 'Renewable Energy seminar — Q&A', 'Dulan Wijesinghe'),
+  ('https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=800&auto=format&fit=crop', 'Robotics Challenge — team briefing', 'Kavindu Perera'),
+  ('https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?q=80&w=800&auto=format&fit=crop', 'Automation Bootcamp — group photo', 'Dulan Wijesinghe');
 
 -- 3. Newsletter issues
 INSERT INTO public.newsletter_issues (title, description, cover_image_url, file_url, published_at) VALUES
