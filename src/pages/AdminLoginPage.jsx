@@ -26,16 +26,16 @@ export default function AdminLoginPage() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="email" placeholder="Email" required value={email} onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-emerald-500"
+          className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-[var(--ias-green)]"
           style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
         />
         <input
           type="password" placeholder="Password" required value={password} onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-emerald-500"
+          className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-[var(--ias-green)]"
           style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
         />
         {error && <p className="text-xs text-rose-500">{error}</p>}
-        <button type="submit" disabled={loading} className="btn-shimmer w-full py-3 rounded-xl bg-emerald-500 text-white text-sm font-semibold disabled:opacity-60 cursor-pointer">
+        <button type="submit" disabled={loading} className="btn-shimmer w-full py-3 rounded-xl bg-[var(--ias-green)] text-white text-sm font-semibold disabled:opacity-60 cursor-pointer">
           {loading ? 'Logging in...' : 'Log In'}
         </button>
       </form>

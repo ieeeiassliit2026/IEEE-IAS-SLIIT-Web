@@ -134,20 +134,20 @@ export default function ContactPage() {
             <form onSubmit={handleSubmit} className="rounded-2xl p-6 sm:p-8 space-y-4" style={{ background: 'var(--bg-elevated)' }}>
               {status === 'done' ? (
                 <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
-                  <Check size={32} className="text-emerald-500" />
+                  <Check size={32} className="text-[var(--ias-green)]" />
                   <p className="font-semibold" style={{ color: 'var(--text)' }}>Message sent!</p>
                   <p className="text-sm" style={{ color: 'var(--text-muted)' }}>We'll get back to you as soon as possible.</p>
                 </div>
               ) : (
                 <>
                   <input name="name" required value={form.name} onChange={handleChange} placeholder="Name"
-                    className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-[var(--ias-green)]"
                     style={{ borderColor: 'var(--border)', background: 'var(--bg)', color: 'var(--text)' }} />
                   <input name="email" type="email" required value={form.email} onChange={handleChange} placeholder="Email"
-                    className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-[var(--ias-green)]"
                     style={{ borderColor: 'var(--border)', background: 'var(--bg)', color: 'var(--text)' }} />
                   <textarea name="message" required rows={5} value={form.message} onChange={handleChange} placeholder="Your Feedback"
-                    className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-emerald-500 resize-y"
+                    className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-[var(--ias-green)] resize-y"
                     style={{ borderColor: 'var(--border)', background: 'var(--bg)', color: 'var(--text)' }} />
                   {status === 'error' && <p className="text-xs text-rose-500">{error}</p>}
                   <button

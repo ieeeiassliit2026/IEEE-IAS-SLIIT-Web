@@ -6,6 +6,7 @@ import { BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import MagazineCover from '../assets/magazine/cover.webp';
 import MagazinePdf from '../assets/magazine/magazine.pdf';
 import flipSound from '../assets/magazine/flip.mp3';
+import PageHero from '../components/PageHero';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -67,14 +68,17 @@ export default function MagazinePage() {
   };
 
   return (
-    <section className="min-h-[80vh] flex flex-col items-center justify-center px-6 py-16">
+    <>
+      <PageHero title="IAS" accent="Magazine" subtitle="Pick up the latest edition and flip through the pages." />
+
+      <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-16">
       {!opened ? (
         <button onClick={handleOpen} className="group flex flex-col items-center gap-6 cursor-pointer fade-in-snap">
           <div className="relative w-56 sm:w-64 aspect-[3/4] rounded-lg overflow-hidden shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-1">
             <img src={MagazineCover} alt="IAS Magazine" className="w-full h-full object-cover" />
             <div className="absolute inset-0 ring-1 ring-black/10" />
           </div>
-          <span className="btn-shimmer inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-500 text-white text-sm font-semibold">
+          <span className="btn-shimmer inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--ias-green)] text-white text-sm font-semibold">
             <BookOpen size={16} /> Pick Up the Magazine
           </span>
         </button>
@@ -126,6 +130,7 @@ export default function MagazinePage() {
           </div>
         </div>
       )}
-    </section>
+      </section>
+    </>
   );
 }

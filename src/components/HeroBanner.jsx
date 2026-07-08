@@ -28,7 +28,7 @@ export default function HeroBanner({ eyebrow, title, subtitle, children }) {
 
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white fade-in-snap">
         {eyebrow && (
-          <span className="inline-block font-mono text-[11px] tracking-[0.3em] uppercase text-emerald-300 mb-4">
+          <span className="inline-block font-mono text-[11px] tracking-[0.3em] uppercase text-[var(--ias-gold)] mb-4">
             {eyebrow}
           </span>
         )}

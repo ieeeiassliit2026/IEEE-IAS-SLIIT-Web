@@ -1,17 +1,14 @@
 import React from 'react';
 import { LinkedinIcon } from '../components/BrandIcons';
 import { committeeMembers } from '../data/committee';
+import PageHero from '../components/PageHero';
 
 export default function TeamPage() {
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20">
-      <div className="text-center mb-14">
-        <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: 'var(--ias-green)' }}>
-          Our Team
-        </span>
-        <h1 className="font-display text-4xl mt-3">Executive Committee 2026</h1>
-      </div>
+    <>
+      <PageHero title="Our" accent="Team" subtitle="Meet the Executive Committee driving IEEE IAS SLIIT forward." />
 
+      <section className="max-w-6xl mx-auto px-6 py-16">
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {committeeMembers.map((m) => (
           <a
@@ -36,6 +33,7 @@ export default function TeamPage() {
           </a>
         ))}
       </div>
-    </section>
+      </section>
+    </>
   );
 }

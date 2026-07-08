@@ -8,7 +8,7 @@ function Field(props) {
   return (
     <input
       {...props}
-      className="px-3 py-2 rounded-lg border text-sm outline-none focus:border-emerald-500 w-full"
+      className="px-3 py-2 rounded-lg border text-sm outline-none focus:border-[var(--ias-green)] w-full"
       style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
     />
   );
@@ -120,7 +120,7 @@ export default function AdminDashboardPage() {
               <option value="completed">Completed</option>
             </select>
             <textarea placeholder="Description" value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
-            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold cursor-pointer">Add Event</button>
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Event</button>
           </form>
           {events.map((e) => (
             <div key={e.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
@@ -136,7 +136,7 @@ export default function AdminDashboardPage() {
           <form onSubmit={addImage} className="grid sm:grid-cols-2 gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
             <Field placeholder="Image URL" required value={newImage.image_url} onChange={(e) => setNewImage({ ...newImage, image_url: e.target.value })} />
             <Field placeholder="Caption" value={newImage.caption} onChange={(e) => setNewImage({ ...newImage, caption: e.target.value })} />
-            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold cursor-pointer">Add Image</button>
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Image</button>
           </form>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
             {gallery.map((g) => (
@@ -157,7 +157,7 @@ export default function AdminDashboardPage() {
             <Field placeholder="Cover Image URL" value={newIssue.cover_image_url} onChange={(e) => setNewIssue({ ...newIssue, cover_image_url: e.target.value })} />
             <Field placeholder="File URL (PDF)" required value={newIssue.file_url} onChange={(e) => setNewIssue({ ...newIssue, file_url: e.target.value })} />
             <textarea placeholder="Description" value={newIssue.description} onChange={(e) => setNewIssue({ ...newIssue, description: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
-            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold cursor-pointer">Add Issue</button>
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Issue</button>
           </form>
           {issues.map((i) => (
             <div key={i.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
@@ -179,7 +179,7 @@ export default function AdminDashboardPage() {
               Top Volunteer
             </label>
             <textarea placeholder="Contribution note" value={newMember.contribution_note} onChange={(e) => setNewMember({ ...newMember, contribution_note: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
-            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-emerald-500 text-white text-sm font-semibold cursor-pointer">Add Member</button>
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Member</button>
           </form>
           {members.map((m) => (
             <div key={m.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>

@@ -16,7 +16,7 @@ export default function HomePage() {
         subtitle="Bridging students with real-world electrical, electronic, and industrial engineering practice — through workshops, industrial visits, and hands-on projects."
       >
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link to="/about" className="btn-shimmer px-6 py-3 rounded-full bg-emerald-500 text-white text-sm font-semibold">
+          <Link to="/about" className="btn-shimmer px-6 py-3 rounded-full bg-[var(--ias-green)] text-white text-sm font-semibold">
             About Us
           </Link>
           <Link to="/events" className="px-6 py-3 rounded-full border border-white/30 text-white text-sm font-semibold link-underline">

@@ -29,7 +29,7 @@ export default function NewsletterBox() {
       </p>
 
       {status === 'done' ? (
-        <div className="flex items-center justify-center gap-2 text-emerald-300 text-sm font-medium">
+        <div className="flex items-center justify-center gap-2 text-[var(--ias-gold)] text-sm font-medium">
           <Check size={16} /> You're subscribed — thank you!
         </div>
       ) : (
@@ -40,12 +40,12 @@ export default function NewsletterBox() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Your email address"
-            className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-sm text-white placeholder-white/40 outline-none focus:border-emerald-400"
+            className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-sm text-white placeholder-white/40 outline-none focus:border-[var(--ias-gold)]"
           />
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="btn-shimmer px-5 py-3 rounded-xl bg-emerald-500 text-white text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+            className="btn-shimmer px-5 py-3 rounded-xl bg-[var(--ias-green)] text-white text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
           >
             {status === 'loading' ? 'Subscribing...' : <>Subscribe Now <Send size={14} /></>}
           </button>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Star, Users } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import PageHero from '../components/PageHero';
 
 function MemberCard({ member }) {
   return (
@@ -9,12 +10,12 @@ function MemberCard({ member }) {
         {member.photo_url ? (
           <img src={member.photo_url} alt={member.full_name} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-emerald-100 text-emerald-700 font-display text-xl">
+          <div className="w-full h-full flex items-center justify-center bg-[var(--ias-green)]/15 text-[var(--ias-green)] font-display text-xl">
             {member.full_name.charAt(0)}
           </div>
         )}
         {member.is_top_volunteer && (
-          <span className="absolute -top-0.5 -right-0.5 bg-amber-400 text-white rounded-full p-1">
+          <span className="absolute -top-0.5 -right-0.5 bg-[var(--ias-gold)] text-white rounded-full p-1">
             <Star size={10} fill="currentColor" />
           </span>
         )}
@@ -46,17 +47,10 @@ export default function MemberWallPage() {
   const others = members.filter((m) => !m.is_top_volunteer);
 
   return (
-    <section className="max-w-6xl mx-auto px-6 py-20">
-      <div className="text-center mb-14">
-        <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: 'var(--ias-green)' }}>
-          Member Wall
-        </span>
-        <h1 className="font-display text-4xl mt-3">Our Community</h1>
-        <p className="max-w-lg mx-auto text-sm mt-3" style={{ color: 'var(--text-muted)' }}>
-          Celebrating registered IEEE IAS members and recognizing top volunteers who make our chapter thrive.
-        </p>
-      </div>
+    <>
+      <PageHero title="Our" accent="Community" subtitle="Celebrating registered IEEE IAS members and recognizing top volunteers who make our chapter thrive." />
 
+      <section className="max-w-6xl mx-auto px-6 py-16">
       {loading ? (
         <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>Loading members...</p>
       ) : members.length === 0 ? (
@@ -69,7 +63,7 @@ export default function MemberWallPage() {
           {topVolunteers.length > 0 && (
             <div className="mb-14">
               <h2 className="font-display text-2xl mb-5 flex items-center gap-2">
-                <Star size={18} className="text-amber-400" fill="currentColor" /> Top Volunteers
+                <Star size={18} className="text-[var(--ias-gold)]" fill="currentColor" /> Top Volunteers
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
                 {topVolunteers.map((m) => <MemberCard key={m.id} member={m} />)}
@@ -86,6 +80,7 @@ export default function MemberWallPage() {
           )}
         </>
       )}
-    </section>
+      </section>
+    </>
   );
 }
