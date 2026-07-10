@@ -6,7 +6,7 @@ import { BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import MagazineCover from '../assets/magazine/cover.webp';
 import MagazinePdf from '../assets/magazine/magazine.pdf';
 import flipSound from '../assets/magazine/flip.mp3';
-import PageHero from '../components/PageHero';
+import BandHero from '../components/BandHero';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -69,7 +69,7 @@ export default function MagazinePage() {
 
   return (
     <>
-      <PageHero title="IAS" accent="Magazine" subtitle="Pick up the latest edition and flip through the pages." />
+      <BandHero title="IAS" accent="Magazine" text="Pick up the latest edition and flip through the pages." />
 
       <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-16">
       {!opened ? (

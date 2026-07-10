@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Mail, Download } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import NewsletterBox from '../components/NewsletterBox';
-import PageHero from '../components/PageHero';
+import BandHero from '../components/BandHero';
+import HeroImg from '../assets/bg2.jpg';
 
 export default function NewsletterPage() {
   const [issues, setIssues] = useState([]);
@@ -21,7 +22,7 @@ export default function NewsletterPage() {
 
   return (
     <>
-      <PageHero title="Publications &" accent="Updates" subtitle="Newsletter editions from IEEE IAS SLIIT — technical articles, event recaps, and announcements." />
+      <BandHero title="Publications" accent="& Updates" image={HeroImg} text="Newsletter editions from IEEE IAS SLIIT — technical articles, event recaps, and announcements." />
 
       <section className="max-w-6xl mx-auto px-6 py-16">
         {loading ? (

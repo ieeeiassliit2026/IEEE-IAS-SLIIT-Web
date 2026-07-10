@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import ImageHero from '../components/ImageHero';
 import HeroImg from '../assets/hero.jpg';
 
 function EventCard({ event, onOpen }) {
@@ -47,20 +48,12 @@ export default function EventsPage() {
 
   return (
     <>
-      {/* ── Hero band: bold typographic title + photo ── */}
-      <section className="grid sm:grid-cols-2 items-stretch" style={{ background: 'var(--bg)' }}>
-        <div className="flex flex-col justify-center px-8 sm:px-14 py-16">
-          <h1 className="font-display font-medium leading-[0.9] text-6xl sm:text-7xl" style={{ color: 'var(--text)' }}>
-            Event
-          </h1>
-          <h1 className="font-display font-medium leading-[0.9] text-6xl sm:text-7xl" style={{ color: 'var(--ias-green)' }}>
-            News
-          </h1>
-        </div>
-        <div className="h-56 sm:h-auto overflow-hidden">
-          <img src={HeroImg} alt="" className="w-full h-full object-cover" style={{ filter: 'grayscale(0.2)' }} />
-        </div>
-      </section>
+      <ImageHero
+        image={HeroImg}
+        height="h-[70vh]"
+        title={<>EVENT<br />NEWS</>}
+        subtitle="Everything happening across the IEEE IAS SLIIT chapter."
+      />
 
       <section className="max-w-6xl mx-auto px-6 py-16">
       {loading ? (

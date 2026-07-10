@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Star, Users } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
-import PageHero from '../components/PageHero';
+import BandHero from '../components/BandHero';
+import HeroImg from '../assets/bg.jpg';
 
 function MemberCard({ member }) {
   return (
@@ -48,7 +49,7 @@ export default function MemberWallPage() {
 
   return (
     <>
-      <PageHero title="Our" accent="Community" subtitle="Celebrating registered IEEE IAS members and recognizing top volunteers who make our chapter thrive." />
+      <BandHero title="Member" accent="Wall" image={HeroImg} text="Celebrating registered IEEE IAS members and recognizing the top volunteers who make our chapter thrive." />
 
       <section className="max-w-6xl mx-auto px-6 py-16">
       {loading ? (

@@ -1,77 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
+import { Moon, Sun } from 'lucide-react';
 import IASLogo from '../assets/IAS.png';
+import { useAuth } from '../lib/AuthContext';
 
-const NAV_LINKS = [
+const LINKS = [
   { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' },
-  { to: '/team', label: 'Team' },
-  { to: '/events', label: 'Events' },
+  { to: '/about', label: 'About Us' },
+  { to: '/contact', label: 'Contact Us' },
   { to: '/gallery', label: 'Gallery' },
+  { to: '/community', label: 'Community' },
+  { to: '/events', label: 'Events' },
+  { to: '/news', label: 'News' },
   { to: '/magazine', label: 'Magazine' },
-  { to: '/newsletter', label: 'Newsletter' },
-  { to: '/members', label: 'Member Wall' },
-  { to: '/contact', label: 'Contact' },
 ];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const [dark, setDark] = useState(() => localStorage.getItem('ias-theme') === 'dark');
   const location = useLocation();
+  const { session } = useAuth();
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark);
     localStorage.setItem('ias-theme', dark ? 'dark' : 'light');
   }, [dark]);
 
-  useEffect(() => setOpen(false), [location]);
+  useEffect(() => setIsOpen(false), [location]);
+
+  // Hide the bar while scrolling down, reveal it again on the way back up.
+  useEffect(() => {
+    const handleScroll = () => {
+      const y = window.scrollY;
+      setShowNavbar(!(y > lastScrollY && y > 100));
+      setLastScrollY(y);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('nav')) setIsOpen(false);
+    };
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const linkClass = ({ isActive }) =>
+    `font-semibold text-sm whitespace-nowrap transition-colors ${isActive ? 'text-[var(--ias-green)]' : 'hover:text-[var(--ias-green)]'}`;
 
   return (
-    <header
-      className="sticky top-0 z-50 backdrop-blur-md border-b"
-      style={{ background: 'color-mix(in srgb, var(--bg-elevated) 85%, transparent)', borderColor: 'var(--border)' }}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={IASLogo} alt="IEEE IAS SLIIT" className="h-9 w-auto object-contain" />
-        </Link>
+    <div className="mx-auto lg:w-2/3">
+      <nav
+        className={`relative lg:fixed top-0 left-1/2 -translate-x-1/2 w-full lg:w-[1040px] z-50 shadow-2xl px-5 py-3 lg:rounded-b-3xl transition-transform duration-500 ${
+          showNavbar ? 'translate-y-0' : '-translate-y-full'
+        }`}
+        style={{ background: 'var(--bg-elevated)', color: 'var(--text)' }}
+      >
+        <div className="flex justify-between items-center lg:justify-center gap-4 mx-auto">
+          <Link to="/">
+            <img src={IASLogo} alt="IEEE IAS SLIIT" className="h-10 w-auto object-contain lg:mr-8" />
+          </Link>
 
-        <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
-          {NAV_LINKS.map((l) => (
-            <Link key={l.to} to={l.to} className="link-underline" style={{ color: 'var(--text-muted)' }}>
-              {l.label}
+          <div className="hidden lg:flex gap-6 items-center">
+            {LINKS.map((l) => (
+              <NavLink key={l.to} to={l.to} className={linkClass}>
+                {l.label}
+              </NavLink>
+            ))}
+            <Link
+              to={session ? '/profile' : '/login'}
+              className="font-semibold text-sm px-4 py-1.5 rounded-full text-white whitespace-nowrap"
+              style={{ background: 'var(--ias-green)' }}
+            >
+              {session ? 'Profile' : 'Login'}
             </Link>
-          ))}
-        </nav>
+            <button
+              onClick={() => setDark((d) => !d)}
+              aria-label="Toggle theme"
+              className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
+            >
+              {dark ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setDark((d) => !d)}
-            aria-label="Toggle theme"
-            className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-          >
-            {dark ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="lg:hidden p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-            aria-label="Toggle menu"
-          >
-            {open ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          {/* Burger */}
+          <div className="lg:hidden flex items-center gap-3">
+            <button
+              onClick={() => setDark((d) => !d)}
+              aria-label="Toggle theme"
+              className="p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
+            >
+              {dark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <div
+              className="cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); setIsOpen((o) => !o); }}
+              role="button"
+              aria-label="Toggle menu"
+            >
+              <div className={`w-6 h-1 rounded mb-1 transition-transform ${isOpen ? 'translate-y-2 rotate-45' : ''}`} style={{ background: 'var(--text)' }} />
+              <div className={`w-6 h-1 rounded mb-1 transition-opacity ${isOpen ? 'opacity-0' : 'opacity-100'}`} style={{ background: 'var(--text)' }} />
+              <div className={`w-6 h-1 rounded transition-transform ${isOpen ? '-translate-y-2 -rotate-45' : ''}`} style={{ background: 'var(--text)' }} />
+            </div>
+          </div>
         </div>
-      </div>
 
-      {open && (
-        <nav className="lg:hidden flex flex-col px-6 pb-4 gap-3 fade-in-snap">
-          {NAV_LINKS.map((l) => (
-            <Link key={l.to} to={l.to} className="text-sm font-medium py-1" style={{ color: 'var(--text-muted)' }}>
+        {/* Mobile dropdown */}
+        <div
+          className={`absolute top-full left-0 w-full font-semibold shadow-md p-4 text-center transition-all duration-300 ease-in-out ${
+            isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+          style={{ background: 'var(--bg-elevated)' }}
+        >
+          {LINKS.map((l) => (
+            <NavLink key={l.to} to={l.to} className="block py-2 text-sm">
               {l.label}
-            </Link>
+            </NavLink>
           ))}
-        </nav>
-      )}
-    </header>
+          <NavLink to={session ? '/profile' : '/login'} className="block py-2 text-sm" style={{ color: 'var(--ias-green)' }}>
+            {session ? 'Profile' : 'Login / Register'}
+          </NavLink>
+        </div>
+      </nav>
+    </div>
   );
 }

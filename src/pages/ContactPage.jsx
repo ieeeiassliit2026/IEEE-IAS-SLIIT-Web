@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone, Send, Check, ChevronDown, PhoneCall } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, Check, ChevronDown } from 'lucide-react';
 import { LinkedinIcon, InstagramIcon, FacebookIcon } from '../components/BrandIcons';
 import { supabase } from '../lib/supabaseClient';
+import BandHero from '../components/BandHero';
+import ContactImg from '../assets/bg.jpg';
 
 const MEMBERSHIP_INFO = [
   {
@@ -64,22 +66,12 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* ── Hero band ── */}
-      <section className="py-20 px-6" style={{ background: 'var(--ias-navy)', color: '#fff' }}>
-        <div className="max-w-6xl mx-auto grid sm:grid-cols-2 gap-10 items-center">
-          <div>
-            <h1 className="font-display text-5xl sm:text-6xl leading-none mb-4">
-              Contact<br /><span style={{ color: 'var(--ias-gold)' }}>Us</span>
-            </h1>
-            <p className="text-sm text-white/60 max-w-sm">
-              IEEE is the trusted voice for engineering, computing, and technology information around the globe.
-            </p>
-          </div>
-          <div className="hidden sm:flex justify-center">
-            <PhoneCall size={140} strokeWidth={1} style={{ color: 'var(--ias-gold)', opacity: 0.5 }} />
-          </div>
-        </div>
-      </section>
+      <BandHero
+        title="Contact"
+        accent="Us"
+        text="IEEE is the trusted voice for engineering, computing, and technology information around the globe."
+        image={ContactImg}
+      />
 
       {/* ── Membership info ── */}
       <section className="max-w-3xl mx-auto px-6 py-16">

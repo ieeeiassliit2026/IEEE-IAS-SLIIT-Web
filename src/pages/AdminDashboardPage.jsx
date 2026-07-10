@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
 
-const TABS = ['Contact Messages', 'Events', 'Gallery', 'Newsletter Issues', 'Member Wall'];
+const TABS = ['Contact Messages', 'Pending Members', 'Events', 'News', 'Gallery', 'Newsletter Issues', 'Member Wall'];
 
 function Field(props) {
   return (
@@ -18,19 +18,24 @@ export default function AdminDashboardPage() {
   const { session, signOut } = useAuth();
   const [tab, setTab] = useState(TABS[0]);
   const [contacts, setContacts] = useState([]);
+  const [pendingMembers, setPendingMembers] = useState([]);
   const [events, setEvents] = useState([]);
+  const [news, setNews] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [issues, setIssues] = useState([]);
   const [members, setMembers] = useState([]);
 
   const [newEvent, setNewEvent] = useState({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '' });
+  const [newNews, setNewNews] = useState({ title: '', description: '', image_url: '', published_at: '' });
   const [newImage, setNewImage] = useState({ image_url: '', caption: '' });
   const [newIssue, setNewIssue] = useState({ title: '', description: '', file_url: '', cover_image_url: '', published_at: '' });
   const [newMember, setNewMember] = useState({ full_name: '', role_title: '', contribution_note: '', photo_url: '', is_top_volunteer: false });
 
   const reload = () => {
     supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }).then(({ data }) => setContacts(data || []));
+    supabase.from('member_registrations').select('*').eq('status', 'pending').order('created_at', { ascending: false }).then(({ data }) => setPendingMembers(data || []));
     supabase.from('events').select('*').order('event_date', { ascending: false }).then(({ data }) => setEvents(data || []));
+    supabase.from('news_items').select('*').order('published_at', { ascending: false }).then(({ data }) => setNews(data || []));
     supabase.from('gallery_images').select('*').order('created_at', { ascending: false }).then(({ data }) => setGallery(data || []));
     supabase.from('newsletter_issues').select('*').order('published_at', { ascending: false }).then(({ data }) => setIssues(data || []));
     supabase.from('member_wall').select('*').order('created_at', { ascending: false }).then(({ data }) => setMembers(data || []));
@@ -64,6 +69,16 @@ export default function AdminDashboardPage() {
     e.preventDefault();
     await supabase.from('member_wall').insert(newMember);
     setNewMember({ full_name: '', role_title: '', contribution_note: '', photo_url: '', is_top_volunteer: false });
+    reload();
+  };
+  const addNews = async (e) => {
+    e.preventDefault();
+    await supabase.from('news_items').insert(newNews);
+    setNewNews({ title: '', description: '', image_url: '', published_at: '' });
+    reload();
+  };
+  const setMemberStatus = async (id, status) => {
+    await supabase.from('member_registrations').update({ status }).eq('id', id);
     reload();
   };
   const remove = async (table, id) => {
@@ -109,6 +124,24 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
+      {tab === 'Pending Members' && (
+        <div className="space-y-3">
+          {pendingMembers.length === 0 && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No pending registrations.</p>}
+          {pendingMembers.map((m) => (
+            <div key={m.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
+              <div>
+                <p className="font-semibold text-sm">{m.full_name}</p>
+                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{m.email}</p>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => setMemberStatus(m.id, 'activated')} className="text-xs font-semibold px-3 py-1.5 rounded-full bg-[var(--ias-green)] text-white cursor-pointer">Activate</button>
+                <button onClick={() => setMemberStatus(m.id, 'declined')} className="text-xs font-semibold px-3 py-1.5 rounded-full border text-rose-500 cursor-pointer" style={{ borderColor: 'var(--border)' }}>Decline</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {tab === 'Events' && (
         <div className="space-y-6">
           <form onSubmit={addEvent} className="grid sm:grid-cols-2 gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
@@ -126,6 +159,24 @@ export default function AdminDashboardPage() {
             <div key={e.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
               <div><p className="font-semibold text-sm">{e.title}</p><p className="text-xs" style={{ color: 'var(--text-muted)' }}>{e.event_date} · {e.status}</p></div>
               <button onClick={() => remove('events', e.id)} className="text-xs text-rose-500 cursor-pointer">Delete</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'News' && (
+        <div className="space-y-6">
+          <form onSubmit={addNews} className="grid sm:grid-cols-2 gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
+            <Field placeholder="Title" required value={newNews.title} onChange={(e) => setNewNews({ ...newNews, title: e.target.value })} />
+            <Field type="date" required value={newNews.published_at} onChange={(e) => setNewNews({ ...newNews, published_at: e.target.value })} />
+            <Field placeholder="Image URL" value={newNews.image_url} onChange={(e) => setNewNews({ ...newNews, image_url: e.target.value })} />
+            <textarea placeholder="Description" value={newNews.description} onChange={(e) => setNewNews({ ...newNews, description: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add News Item</button>
+          </form>
+          {news.map((n) => (
+            <div key={n.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
+              <div><p className="font-semibold text-sm">{n.title}</p><p className="text-xs" style={{ color: 'var(--text-muted)' }}>{n.published_at}</p></div>
+              <button onClick={() => remove('news_items', n.id)} className="text-xs text-rose-500 cursor-pointer">Delete</button>
             </div>
           ))}
         </div>

@@ -1,12 +1,13 @@
 import React from 'react';
 import { LinkedinIcon } from '../components/BrandIcons';
 import { committeeMembers } from '../data/committee';
-import PageHero from '../components/PageHero';
+import BandHero from '../components/BandHero';
+import HeroImg from '../assets/hero.jpg';
 
 export default function TeamPage() {
   return (
     <>
-      <PageHero title="Our" accent="Team" subtitle="Meet the Executive Committee driving IEEE IAS SLIIT forward." />
+      <BandHero title="Our" accent="Team" image={HeroImg} text="Meet the Executive Committee driving IEEE IAS SLIIT forward." />
 
       <section className="max-w-6xl mx-auto px-6 py-16">
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

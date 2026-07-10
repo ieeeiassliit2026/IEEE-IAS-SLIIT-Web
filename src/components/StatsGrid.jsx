@@ -1,33 +1,75 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-// Placeholder follower counts — replace with real figures from each platform
-// before launch. Structure/labels match the cs.ieeesliit.com reference.
+// Placeholder follower counts — replace with real IAS figures before launch.
 const STATS = [
-  { value: '200+', label: 'YouTube Subscribers' },
-  { value: '350+', label: 'Instagram Followers' },
-  { value: '1200+', label: 'Facebook Followers' },
-  { value: '480+', label: 'LinkedIn Followers' },
-  { value: '15+', label: 'X Followers' },
-  { value: '40+', label: 'Threads Followers' },
-  { value: '90+', label: 'Telegram Followers' },
-  { value: '260+', label: 'WhatsApp Followers' },
+  { label: 'YouTube Subscribers', value: 200 },
+  { label: 'Instagram Followers', value: 350 },
+  { label: 'Facebook Followers', value: 1200 },
+  { label: 'LinkedIn Followers', value: 480 },
+  { label: 'X Followers', value: 15 },
+  { label: 'Threads Followers', value: 40 },
+  { label: 'Telegram Followers', value: 90 },
+  { label: 'WhatsApp Followers', value: 260 },
 ];
 
+const DURATION = 1400;
+
+function Counter({ value, run }) {
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (!run) return;
+    let frame;
+    const start = performance.now();
+    const tick = (now) => {
+      const progress = Math.min((now - start) / DURATION, 1);
+      // ease-out so the number decelerates into its final value
+      setDisplay(Math.round(value * (1 - Math.pow(1 - progress, 3))));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [run, value]);
+
+  return <>{display}+</>;
+}
+
 export default function StatsGrid() {
+  const ref = useRef(null);
+  const [run, setRun] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setRun(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="max-w-6xl mx-auto px-6 py-16">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {STATS.map((s) => (
-          <div
-            key={s.label}
-            className="card-hover text-center py-6 px-3 rounded-2xl border"
-            style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
-          >
-            <p className="text-xs font-semibold" style={{ color: 'var(--ias-navy)' }}>{s.label}</p>
-            <p className="font-display text-2xl sm:text-3xl mt-2" style={{ color: 'var(--ias-gold)' }}>{s.value}</p>
-          </div>
-        ))}
-      </div>
-    </section>
+    <div ref={ref} className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto px-6 my-16 md:my-28">
+      {STATS.map((s) => (
+        <div
+          key={s.label}
+          className="rounded-2xl px-4 py-6 text-center flex flex-col justify-between shadow-lg"
+          style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)' }}
+        >
+          <h3 className="font-semibold text-sm sm:text-base" style={{ color: 'var(--text)' }}>
+            {s.label}
+          </h3>
+          <p className="font-display font-bold text-3xl sm:text-5xl mt-3" style={{ color: 'var(--ias-green)' }}>
+            <Counter value={s.value} run={run} />
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }
