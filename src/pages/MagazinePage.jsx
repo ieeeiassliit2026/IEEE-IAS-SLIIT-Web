@@ -87,15 +87,21 @@ export default function MagazinePage() {
         />
       </div>
 
-      <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-16">
+      <section className="min-h-[70vh] flex flex-col items-center justify-center px-6 py-20">
       {!opened ? (
-        <button onClick={handleOpen} className="group flex flex-col items-center gap-6 cursor-pointer fade-in-snap">
-          <div className="relative w-56 sm:w-64 aspect-[3/4] rounded-lg overflow-hidden shadow-2xl transition-transform duration-500 group-hover:-translate-y-2 group-hover:rotate-1">
+        <button onClick={handleOpen} className="group flex flex-col items-center gap-10 cursor-pointer fade-in-snap">
+          <div
+            className="relative w-72 sm:w-80 md:w-96 aspect-[3/4] rounded-2xl overflow-hidden transition-transform duration-700 group-hover:-translate-y-4 group-hover:rotate-1"
+            style={{
+              boxShadow: '0 25px 60px -12px rgba(0,0,0,0.4), 0 10px 30px -8px rgba(5,150,105,0.25)',
+              animation: 'float 4s ease-in-out infinite',
+            }}
+          >
             <img src={MagazineCover} alt="IAS Magazine" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 ring-1 ring-black/10" />
+            <div className="absolute inset-0 ring-1 ring-white/20 rounded-2xl" />
           </div>
-          <span className="btn-shimmer inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--ias-green)] text-white text-sm font-semibold">
-            <BookOpen size={16} /> Pick Up the Magazine
+          <span className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--ias-green)] text-white text-base font-semibold">
+            <BookOpen size={18} /> Pick Up the Magazine
           </span>
         </button>
       ) : loading ? (

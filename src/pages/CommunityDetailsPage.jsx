@@ -15,9 +15,29 @@ export default function CommunityDetailsPage() {
       />
 
       <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="font-display text-2xl mb-6 text-center">Executive Committee</h2>
+        <h2 className="font-display text-2xl mb-10 text-center">Executive Committee</h2>
+
+        {committeeMembers.filter((m) => m.position === 'Chapter Advisor').map((advisor) => (
+          <div key={advisor.full_name} className="flex justify-center mb-14">
+            <div
+              className="card-hover group rounded-3xl overflow-hidden border max-w-xs w-full"
+              style={{ borderColor: 'var(--ias-green)', borderWidth: '2px', background: 'var(--bg-elevated)' }}
+            >
+              <div className="relative aspect-[4/5] overflow-hidden">
+                <img src={advisor.photo} alt={advisor.full_name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              </div>
+              <div className="p-5 text-center">
+                <p className="font-display font-bold text-lg">{advisor.full_name}</p>
+                <p className="text-sm font-semibold mt-1" style={{ color: 'var(--ias-green)' }}>{advisor.position}</p>
+                {advisor.description && <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>{advisor.description}</p>}
+              </div>
+            </div>
+          </div>
+        ))}
+
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {committeeMembers.map((m) => (
+          {committeeMembers.filter((m) => m.position !== 'Chapter Advisor').map((m) => (
             <a
               key={m.full_name}
               href={m.linkedin}

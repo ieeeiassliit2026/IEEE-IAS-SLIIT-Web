@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
-import ImageHero from '../components/ImageHero';
 import Reveal from '../components/Reveal';
-import HeroImg from '../assets/hero.jpg';
 
 function EventCard({ event, onOpen }) {
   return (
@@ -49,12 +47,17 @@ export default function EventsPage() {
 
   return (
     <>
-      <ImageHero
-        image={HeroImg}
-        height="h-[70vh]"
-        title={<>EVENT<br />NEWS</>}
-        subtitle="Everything happening across the IEEE IAS SLIIT chapter."
-      />
+      <div className="relative h-[70vh] overflow-hidden lg:-mt-[68px]">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/EventsHeroVid.mp4"
+        />
+        <div className="absolute inset-0 bg-black opacity-30" />
+      </div>
 
       <section className="max-w-6xl mx-auto px-6 py-16">
       {loading ? (

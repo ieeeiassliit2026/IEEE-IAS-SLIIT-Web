@@ -1,3 +1,4 @@
+import AdvisorPhoto from '../assets/committee/anuradha-jayakody.jpg';
 import ShafkhanPhoto from '../assets/committee/shafkhan-mohammed.jpg';
 import MoamPhoto from '../assets/committee/moam-misfar-saadhath-ahmed.jpg';
 import OmaliPhoto from '../assets/committee/omali-nimesha.jpg';
@@ -7,6 +8,13 @@ import NadunPhoto from '../assets/committee/nadun-bopitiya.jpg';
 import RumanaPhoto from '../assets/committee/Rumana.jpg';
 
 export const committeeMembers = [
+  {
+    full_name: 'Prof. Anuradha Jayakody',
+    position: 'Chapter Advisor',
+    description: 'Head, Department of Computer Systems Engineering, Faculty of Computing - SLIIT',
+    photo: AdvisorPhoto,
+    linkedin: '',
+  },
   {
     full_name: 'Shafkhan Mohammed',
     position: 'Chairperson',
