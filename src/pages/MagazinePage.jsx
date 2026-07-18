@@ -6,7 +6,7 @@ import { BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import MagazineCover from '../assets/magazine/cover.webp';
 import MagazinePdf from '../assets/magazine/magazine.pdf';
 import flipSound from '../assets/magazine/flip.mp3';
-import BandHero from '../components/BandHero';
+import MagazineHeroImg from '../assets/magazine-hero.png';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -69,7 +69,23 @@ export default function MagazinePage() {
 
   return (
     <>
-      <BandHero title="IAS" accent="Magazine" text="Pick up the latest edition and flip through the pages." />
+      <div className="relative overflow-hidden lg:-mt-[68px]" style={{ background: 'var(--ias-green)' }}>
+        <div className="relative z-10 max-w-7xl mx-auto px-5 py-20 md:px-10 md:py-32 lg:pt-[calc(68px+3rem)] lg:pb-36 flex items-center">
+          <div className="flex flex-col w-full lg:w-1/2">
+            <h1 className="mb-2 text-5xl font-bold text-white leading-[0.85] md:text-[7rem] md:mb-6">IAS</h1>
+            <h1 className="mb-4 text-5xl font-bold leading-[0.85] md:text-[6rem] md:mb-10" style={{ color: 'var(--ias-navy)' }}>Magazine</h1>
+            <p className="mb-6 max-w-lg text-sm text-white/70 sm:text-lg md:mb-0 leading-relaxed">
+              Pick up the latest edition and flip through the pages.
+            </p>
+          </div>
+        </div>
+        <img
+          src={MagazineHeroImg}
+          alt=""
+          className="hidden lg:block absolute right-0 h-full object-contain object-right-top"
+          style={{ maxWidth: '50%', top: '68px' }}
+        />
+      </div>
 
       <section className="min-h-[60vh] flex flex-col items-center justify-center px-6 py-16">
       {!opened ? (

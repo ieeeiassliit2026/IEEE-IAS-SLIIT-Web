@@ -4,7 +4,7 @@ import { LinkedinIcon, InstagramIcon, FacebookIcon } from '../components/BrandIc
 import { supabase } from '../lib/supabaseClient';
 import BandHero from '../components/BandHero';
 import Reveal from '../components/Reveal';
-import ContactImg from '../assets/bg.jpg';
+import ContactImg from '../assets/contact.png';
 
 const MEMBERSHIP_INFO = [
   {
