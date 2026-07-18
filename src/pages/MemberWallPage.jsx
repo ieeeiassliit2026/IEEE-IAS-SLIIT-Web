@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Star, Users } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import BandHero from '../components/BandHero';
-import HeroImg from '../assets/community.png';
+import HeroImg from '../assets/bg.jpg';
 
 function MemberCard({ member }) {
   return (

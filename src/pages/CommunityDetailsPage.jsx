@@ -2,7 +2,7 @@ import React from 'react';
 import { LinkedinIcon } from '../components/BrandIcons';
 import { committeeMembers } from '../data/committee';
 import BandHero from '../components/BandHero';
-import HeroImg from '../assets/hero.jpg';
+import HeroImg from '../assets/ourcommunity.png';
 
 export default function CommunityDetailsPage() {
   return (
