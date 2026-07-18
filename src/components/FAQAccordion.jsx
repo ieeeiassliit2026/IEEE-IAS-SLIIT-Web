@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import Reveal from './Reveal';
 
 const FAQS = [
   {
@@ -21,12 +22,14 @@ export default function FAQAccordion() {
 
   return (
     <section className="max-w-3xl mx-auto px-6 py-20">
+      <Reveal>
       <div className="mb-10 text-center">
         <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: 'var(--ias-green)' }}>
           FAQ
         </span>
         <h2 className="font-display text-3xl mt-2">Common Questions</h2>
       </div>
+      </Reveal>
 
       <div className="space-y-3">
         {FAQS.map((item, i) => {

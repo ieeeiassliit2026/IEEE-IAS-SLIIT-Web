@@ -3,6 +3,7 @@ import { Mail, Download } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import NewsletterBox from '../components/NewsletterBox';
 import BandHero from '../components/BandHero';
+import Reveal from '../components/Reveal';
 import HeroImg from '../assets/bg2.jpg';
 
 export default function NewsletterPage() {
@@ -34,8 +35,9 @@ export default function NewsletterPage() {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mb-16">
-            {issues.map((issue) => (
-              <div key={issue.id} className="card-hover rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}>
+            {issues.map((issue, i) => (
+              <Reveal key={issue.id} delay={i * 100} direction="scale">
+              <div className="card-hover rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}>
                 {issue.cover_image_url && (
                   <div className="aspect-[3/4] overflow-hidden">
                     <img src={issue.cover_image_url} alt={issue.title} className="w-full h-full object-cover" />
@@ -52,11 +54,12 @@ export default function NewsletterPage() {
                   </a>
                 </div>
               </div>
+              </Reveal>
             ))}
           </div>
         )}
 
-        <NewsletterBox />
+        <Reveal><NewsletterBox /></Reveal>
       </section>
     </>
   );

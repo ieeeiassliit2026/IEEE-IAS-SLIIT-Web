@@ -4,11 +4,11 @@ import React from 'react';
  * CS-style page header: a solid colour band holding a giant stacked two-tone
  * title with a supporting paragraph on the left, and an illustration on the right.
  */
-export default function BandHero({ title, accent, text, image, band = 'var(--ias-navy)', accentColor = 'var(--ias-gold)' }) {
+export default function BandHero({ title, accent, text, image, band = 'var(--ias-navy)', accentColor = 'var(--ias-green)' }) {
   return (
-    <div style={{ background: band }}>
+    <div style={{ background: band }} className="lg:-mt-[68px]">
       <header>
-        <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:pt-32">
+        <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-24 lg:pt-[calc(68px+2rem)]">
           <div className="grid items-center justify-items-start gap-8 sm:gap-16 lg:grid-cols-2">
             <div className="flex flex-col">
               <div className="md:grid flex justify-center gap-x-4">

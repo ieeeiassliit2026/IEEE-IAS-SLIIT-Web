@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { LinkedinIcon } from './BrandIcons';
 import { committeeMembers } from '../data/committee';
+import Reveal from './Reveal';
 
 export default function CommitteeSlider() {
   const trackRef = useRef(null);
@@ -12,6 +13,7 @@ export default function CommitteeSlider() {
 
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
+      <Reveal>
       <div className="flex items-end justify-between mb-8">
         <div>
           <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: 'var(--ias-green)' }}>
@@ -53,6 +55,7 @@ export default function CommitteeSlider() {
           </a>
         ))}
       </div>
+      </Reveal>
     </section>
   );
 }

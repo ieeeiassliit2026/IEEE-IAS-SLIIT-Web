@@ -10,7 +10,7 @@ export default function FeatureCard({ image, title, date, description }) {
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
       {date && (
-        <p className="z-10 text-xs font-mono uppercase tracking-wide mb-1" style={{ color: 'var(--ias-gold)' }}>
+        <p className="z-10 text-xs font-mono uppercase tracking-wide mb-1" style={{ color: 'var(--ias-green)' }}>
           {date}
         </p>
       )}

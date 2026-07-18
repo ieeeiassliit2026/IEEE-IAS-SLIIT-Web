@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Image as ImageIcon, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import ImageHero from '../components/ImageHero';
-import HeroBg from '../assets/bg2.jpg';
+import Reveal from '../components/Reveal';
+import HeroBg from '../assets/galleryHero.png';
 import { committeeMembers } from '../data/committee';
 
 export default function GalleryPage() {
@@ -39,7 +40,7 @@ export default function GalleryPage() {
       />
 
       <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="font-display text-2xl mb-6 text-center">Organizing Committee</h2>
+        <Reveal><h2 className="font-display text-2xl mb-6 text-center">Organizing Committee</h2></Reveal>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4 mb-16">
           {committeeMembers.map((m) => (
             <a
@@ -55,7 +56,7 @@ export default function GalleryPage() {
           ))}
         </div>
 
-        <h2 className="font-display text-2xl mb-6 text-center">Event Photos</h2>
+        <Reveal><h2 className="font-display text-2xl mb-6 text-center">Event Photos</h2></Reveal>
         {loading ? (
           <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>Loading gallery...</p>
         ) : images.length === 0 ? (

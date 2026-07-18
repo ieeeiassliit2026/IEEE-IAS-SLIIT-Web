@@ -17,7 +17,7 @@ export default function ImageHero({ image, title, subtitle, height = 'h-[70vh]',
       <div className="relative z-10 flex flex-col px-6 mx-auto justify-center items-center h-full text-center">
         <h1
           className="font-display text-4xl sm:text-6xl md:text-7xl font-bold leading-tight mb-4 drop-shadow-2xl"
-          style={{ color: 'var(--ias-gold)' }}
+          style={{ color: 'var(--ias-green)' }}
         >
           {title}
         </h1>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Wrench, Building2, Presentation, Trophy, PartyPopper, Calendar, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Reveal from './Reveal';
 
 const TYPE_ICON = {
   workshop: Wrench,
@@ -32,18 +33,21 @@ export default function EventTimeline({ limit = 6 }) {
 
   return (
     <section className="max-w-4xl mx-auto px-6 py-20">
+      <Reveal>
       <div className="mb-10 text-center">
         <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: 'var(--ias-green)' }}>
           Timeline
         </span>
         <h2 className="font-display text-3xl mt-2">Milestones &amp; Events</h2>
       </div>
+      </Reveal>
 
       <div className="relative pl-8 border-l" style={{ borderColor: 'var(--border)' }}>
-        {events.map((e) => {
+        {events.map((e, idx) => {
           const Icon = TYPE_ICON[e.event_type] || Calendar;
           return (
-            <div key={e.id} className="relative mb-10 last:mb-0 fade-in-snap">
+            <Reveal key={e.id} delay={idx * 100}>
+            <div className="relative mb-10 last:mb-0">
               <span
                 className="absolute -left-[calc(2rem+9px)] top-1 w-4 h-4 rounded-full border-2 flex items-center justify-center"
                 style={{ background: 'var(--bg)', borderColor: 'var(--ias-green)' }}
@@ -59,6 +63,7 @@ export default function EventTimeline({ limit = 6 }) {
                 Read More <ArrowRight size={12} />
               </a>
             </div>
+            </Reveal>
           );
         })}
       </div>

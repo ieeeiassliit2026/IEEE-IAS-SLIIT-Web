@@ -7,7 +7,7 @@ import HeroImg from '../assets/bg.jpg';
 function MemberCard({ member }) {
   return (
     <div className="card-hover rounded-2xl overflow-hidden border text-center p-5" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}>
-      <div className="relative w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-2" style={{ borderColor: member.is_top_volunteer ? 'var(--ias-gold)' : 'var(--border)' }}>
+      <div className="relative w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border-2" style={{ borderColor: member.is_top_volunteer ? 'var(--ias-green)' : 'var(--border)' }}>
         {member.photo_url ? (
           <img src={member.photo_url} alt={member.full_name} className="w-full h-full object-cover" />
         ) : (
@@ -16,7 +16,7 @@ function MemberCard({ member }) {
           </div>
         )}
         {member.is_top_volunteer && (
-          <span className="absolute -top-0.5 -right-0.5 bg-[var(--ias-gold)] text-white rounded-full p-1">
+          <span className="absolute -top-0.5 -right-0.5 bg-[var(--ias-green)] text-white rounded-full p-1">
             <Star size={10} fill="currentColor" />
           </span>
         )}
@@ -64,7 +64,7 @@ export default function MemberWallPage() {
           {topVolunteers.length > 0 && (
             <div className="mb-14">
               <h2 className="font-display text-2xl mb-5 flex items-center gap-2">
-                <Star size={18} className="text-[var(--ias-gold)]" fill="currentColor" /> Top Volunteers
+                <Star size={18} className="text-[var(--ias-green)]" fill="currentColor" /> Top Volunteers
               </h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5">
                 {topVolunteers.map((m) => <MemberCard key={m.id} member={m} />)}

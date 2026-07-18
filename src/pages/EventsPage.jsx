@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, X } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import ImageHero from '../components/ImageHero';
+import Reveal from '../components/Reveal';
 import HeroImg from '../assets/hero.jpg';
 
 function EventCard({ event, onOpen }) {
@@ -69,7 +70,7 @@ export default function EventsPage() {
             <h2 className="font-display text-2xl mb-5 text-center">Ongoing Events</h2>
             {upcoming.length > 0 ? (
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
-                {upcoming.map((e) => <EventCard key={e.id} event={e} onOpen={setSelected} />)}
+                {upcoming.map((e, i) => <Reveal key={e.id} delay={i * 80}><EventCard event={e} onOpen={setSelected} /></Reveal>)}
               </div>
             ) : (
               <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>No ongoing events right now.</p>
@@ -79,7 +80,7 @@ export default function EventsPage() {
             <div>
               <h2 className="font-display text-2xl mb-5 text-center">Past Events</h2>
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5">
-                {completed.map((e) => <EventCard key={e.id} event={e} onOpen={setSelected} />)}
+                {completed.map((e, i) => <Reveal key={e.id} delay={i * 80}><EventCard event={e} onOpen={setSelected} /></Reveal>)}
               </div>
             </div>
           )}

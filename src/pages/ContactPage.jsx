@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone, Send, Check, ChevronDown } from 'lucide-react';
 import { LinkedinIcon, InstagramIcon, FacebookIcon } from '../components/BrandIcons';
 import { supabase } from '../lib/supabaseClient';
 import BandHero from '../components/BandHero';
+import Reveal from '../components/Reveal';
 import ContactImg from '../assets/bg.jpg';
 
 const MEMBERSHIP_INFO = [
@@ -75,46 +76,49 @@ export default function ContactPage() {
 
       {/* ── Membership info ── */}
       <section className="max-w-3xl mx-auto px-6 py-16">
-        <MembershipAccordion />
+        <Reveal>
+          <MembershipAccordion />
+        </Reveal>
       </section>
 
       {/* ── Let's Talk! ── */}
       <section className="py-16 px-6" style={{ background: 'var(--ias-navy)', color: '#fff' }}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-display text-4xl mb-2">Let's <span style={{ color: 'var(--ias-gold)' }}>Talk!</span></h2>
+          <h2 className="font-display text-4xl mb-2">Let's <span style={{ color: 'var(--ias-green)' }}>Talk!</span></h2>
           <p className="text-sm text-white/60 mb-8">Share your thoughts and help us get in touch — or simply say hi!</p>
 
           <div className="grid lg:grid-cols-2 gap-10">
+            <Reveal direction="left">
             <div>
               <div className="flex items-center gap-4 mb-8">
-                <a href="https://www.linkedin.com/company/ieee-industry-applications-society-of-sliit/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="hover:text-[var(--ias-gold)] transition-colors">
+                <a href="https://www.linkedin.com/company/ieee-industry-applications-society-of-sliit/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="hover:text-[var(--ias-green)] transition-colors">
                   <LinkedinIcon size={20} />
                 </a>
-                <a href="https://www.instagram.com/ias_sliit/" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-[var(--ias-gold)] transition-colors">
+                <a href="https://www.instagram.com/ias_sliit/" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-[var(--ias-green)] transition-colors">
                   <InstagramIcon size={20} />
                 </a>
-                <a href="#" aria-label="Facebook" className="hover:text-[var(--ias-gold)] transition-colors">
+                <a href="#" aria-label="Facebook" className="hover:text-[var(--ias-green)] transition-colors">
                   <FacebookIcon size={20} />
                 </a>
               </div>
 
               <div className="space-y-5">
                 <div className="flex items-start gap-3">
-                  <Mail size={18} className="mt-0.5" style={{ color: 'var(--ias-gold)' }} />
+                  <Mail size={18} className="mt-0.5" style={{ color: 'var(--ias-green)' }} />
                   <div>
                     <p className="text-sm font-semibold">Email</p>
                     <p className="text-sm text-white/60">ias@ieeesliit.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <MapPin size={18} className="mt-0.5" style={{ color: 'var(--ias-gold)' }} />
+                  <MapPin size={18} className="mt-0.5" style={{ color: 'var(--ias-green)' }} />
                   <div>
                     <p className="text-sm font-semibold">Location</p>
                     <p className="text-sm text-white/60">SLIIT Malabe Campus, New Kandy Road, Malabe, Sri Lanka</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Phone size={18} className="mt-0.5" style={{ color: 'var(--ias-gold)' }} />
+                  <Phone size={18} className="mt-0.5" style={{ color: 'var(--ias-green)' }} />
                   <div>
                     <p className="text-sm font-semibold">Phone</p>
                     <p className="text-sm text-white/60">+94 78 526 4854</p>
@@ -122,7 +126,9 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
+            </Reveal>
 
+            <Reveal direction="right">
             <form onSubmit={handleSubmit} className="rounded-2xl p-6 sm:p-8 space-y-4" style={{ background: 'var(--bg-elevated)' }}>
               {status === 'done' ? (
                 <div className="flex flex-col items-center justify-center py-12 gap-3 text-center">
@@ -146,19 +152,21 @@ export default function ContactPage() {
                     type="submit"
                     disabled={status === 'loading'}
                     className="btn-shimmer w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
-                    style={{ background: 'var(--ias-gold)', color: 'var(--ias-navy)' }}
+                    style={{ background: 'var(--ias-green)', color: '#fff' }}
                   >
                     {status === 'loading' ? 'Submitting...' : <>Submit <Send size={14} /></>}
                   </button>
                 </>
               )}
             </form>
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* ── Map ── */}
       <section className="max-w-6xl mx-auto px-6 py-16">
+        <Reveal>
         <div className="rounded-2xl overflow-hidden border h-72" style={{ borderColor: 'var(--border)' }}>
           <iframe
             title="SLIIT Malabe Campus Map"
@@ -169,6 +177,7 @@ export default function ContactPage() {
             loading="lazy"
           />
         </div>
+        </Reveal>
       </section>
     </>
   );
