@@ -4,7 +4,7 @@ import StatsGrid from '../components/StatsGrid';
 import BandHero from '../components/BandHero';
 import Reveal from '../components/Reveal';
 import AboutImg from '../assets/aboutUs.png';
-import GridImg from '../assets/hero.jpg';
+import GridImg from '../assets/HeroOC.jpg';
 
 const PILLARS = [
   {

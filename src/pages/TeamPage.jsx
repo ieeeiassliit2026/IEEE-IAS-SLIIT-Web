@@ -3,7 +3,7 @@ import { LinkedinIcon } from '../components/BrandIcons';
 import { committeeMembers } from '../data/committee';
 import BandHero from '../components/BandHero';
 import Reveal from '../components/Reveal';
-import HeroImg from '../assets/hero.jpg';
+import HeroImg from '../assets/HeroOC.jpg';
 
 export default function TeamPage() {
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
-import HeroImg from '../assets/hero.jpg';
+import HeroImg from '../assets/HeroOC.jpg';
 
 export default function HeroBanner({ eyebrow, title, subtitle, children }) {
   const [entered, setEntered] = useState(false);

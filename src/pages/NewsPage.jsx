@@ -3,7 +3,7 @@ import { Newspaper } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import ImageHero from '../components/ImageHero';
 import FeatureCard from '../components/FeatureCard';
-import HeroBg from '../assets/hero.jpg';
+import HeroBg from '../assets/HeroOC.jpg';
 
 export default function NewsPage() {
   const [items, setItems] = useState([]);
