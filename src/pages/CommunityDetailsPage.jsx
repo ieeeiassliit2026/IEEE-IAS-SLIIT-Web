@@ -20,17 +20,17 @@ export default function CommunityDetailsPage() {
         {committeeMembers.filter((m) => m.position === 'Chapter Advisor').map((advisor) => (
           <div key={advisor.full_name} className="flex justify-center mb-14">
             <div
-              className="card-hover group rounded-3xl overflow-hidden border max-w-xs w-full"
+              className="card-hover group rounded-3xl overflow-hidden border w-full max-w-2xl flex flex-col md:flex-row md:items-center"
               style={{ borderColor: 'var(--ias-green)', borderWidth: '2px', background: 'var(--bg-elevated)' }}
             >
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="relative w-full md:w-64 flex-shrink-0 aspect-square md:aspect-auto md:h-full overflow-hidden">
                 <img src={advisor.photo} alt={advisor.full_name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/50 via-transparent to-transparent" />
               </div>
-              <div className="p-5 text-center">
-                <p className="font-display font-bold text-lg">{advisor.full_name}</p>
+              <div className="p-6 md:p-8 text-center md:text-left">
+                <p className="font-display font-bold text-xl md:text-2xl">{advisor.full_name}</p>
                 <p className="text-sm font-semibold mt-1" style={{ color: 'var(--ias-green)' }}>{advisor.position}</p>
-                {advisor.description && <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>{advisor.description}</p>}
+                {advisor.description && <p className="text-sm mt-3 leading-relaxed" style={{ color: 'var(--text-muted)' }}>{advisor.description}</p>}
               </div>
             </div>
           </div>

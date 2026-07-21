@@ -125,7 +125,7 @@ export default function HomePage() {
       <FAQAccordion />
       <FeedbackBand />
 
-      <div className="max-w-5xl mx-auto px-6 py-20">
+      <div className="max-w-5xl mx-auto px-6 my-20">
         <Reveal>
           <NewsletterBox />
         </Reveal>
