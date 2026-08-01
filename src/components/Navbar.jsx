@@ -19,10 +19,10 @@ const LINKS = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [dark, setDark] = useState(() => localStorage.getItem('ias-theme') === 'dark');
   const [underline, setUnderline] = useState({ left: 0, width: 0 });
   const linksRef = useRef(null);
+  const lastScrollY = useRef(0);
   const location = useLocation();
   const { session } = useAuth();
 
@@ -47,12 +47,14 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY;
-      setShowNavbar(!(y > lastScrollY && y > 100));
-      setLastScrollY(y);
+      const delta = y - lastScrollY.current;
+      if (Math.abs(delta) < 5) return;
+      setShowNavbar(delta < 0 || y < 100);
+      lastScrollY.current = y;
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {

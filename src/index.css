@@ -46,13 +46,8 @@ body {
   transition: background 400ms ease, color 400ms ease;
 }
 
-*, *::before, *::after {
-  transition-property: background-color, border-color, color;
-  transition-duration: 0ms;
-}
 :root.theme-transitioning *, :root.theme-transitioning *::before, :root.theme-transitioning *::after {
-  transition-duration: 400ms !important;
-  transition-timing-function: ease !important;
+  transition: background-color 400ms ease, border-color 400ms ease, color 400ms ease !important;
 }
 
 h1, h2, h3, h4, .font-display {
