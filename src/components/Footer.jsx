@@ -41,7 +41,7 @@ export default function Footer() {
         <div className="lg:flex lg:flex-row lg:justify-between">
           {/* Logo + socials */}
           <div className="grid justify-start content-start">
-            <img src={IASLogo} alt="IEEE IAS SLIIT" className="w-44 object-contain" />
+            <img src={IASLogo} alt="IEEE IAS SLIIT" className="w-44 object-contain logo-theme" />
             <p className="text-sm mt-4 max-w-xs" style={{ color: 'var(--text-muted)' }}>
               IEEE Industry Applications Society — Student Chapter, SLIIT.
             </p>

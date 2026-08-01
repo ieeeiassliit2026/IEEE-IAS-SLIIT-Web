@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
 
-const TABS = ['Contact Messages', 'Pending Members', 'Events', 'News', 'Gallery', 'Newsletter Issues', 'Member Wall'];
+const TABS = ['Contact Messages', 'Pending Members', 'Events', 'News', 'Gallery', 'Newsletter Issues', 'IAS Squad'];
 
 function Field(props) {
   return (
@@ -25,17 +25,20 @@ export default function AdminDashboardPage() {
   const [issues, setIssues] = useState([]);
   const [members, setMembers] = useState([]);
 
-  const [newEvent, setNewEvent] = useState({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '' });
+  const [newEvent, setNewEvent] = useState({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '', video_url: '' });
   const [newNews, setNewNews] = useState({ title: '', description: '', image_url: '', published_at: '' });
   const [newImage, setNewImage] = useState({ image_url: '', caption: '' });
   const [newIssue, setNewIssue] = useState({ title: '', description: '', file_url: '', cover_image_url: '', published_at: '' });
-  const [newMember, setNewMember] = useState({ full_name: '', role_title: '', contribution_note: '', photo_url: '', is_top_volunteer: false });
+  const [newMember, setNewMember] = useState({ full_name: '', role_title: '', contribution_note: '', photo_url: '', linkedin_url: '', category: 'member', is_top_volunteer: false });
+
+  const [pendingNews, setPendingNews] = useState([]);
 
   const reload = () => {
     supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }).then(({ data }) => setContacts(data || []));
     supabase.from('member_registrations').select('*').eq('status', 'pending').order('created_at', { ascending: false }).then(({ data }) => setPendingMembers(data || []));
     supabase.from('events').select('*').order('event_date', { ascending: false }).then(({ data }) => setEvents(data || []));
-    supabase.from('news_items').select('*').order('published_at', { ascending: false }).then(({ data }) => setNews(data || []));
+    supabase.from('news_items').select('*').or('status.is.null,status.eq.approved').order('published_at', { ascending: false }).then(({ data }) => setNews(data || []));
+    supabase.from('news_items').select('*').eq('status', 'pending').order('published_at', { ascending: false }).then(({ data }) => setPendingNews(data || []));
     supabase.from('gallery_images').select('*').order('created_at', { ascending: false }).then(({ data }) => setGallery(data || []));
     supabase.from('newsletter_issues').select('*').order('published_at', { ascending: false }).then(({ data }) => setIssues(data || []));
     supabase.from('member_wall').select('*').order('created_at', { ascending: false }).then(({ data }) => setMembers(data || []));
@@ -50,7 +53,7 @@ export default function AdminDashboardPage() {
   const addEvent = async (e) => {
     e.preventDefault();
     await supabase.from('events').insert(newEvent);
-    setNewEvent({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '' });
+    setNewEvent({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '', video_url: '' });
     reload();
   };
   const addImage = async (e) => {
@@ -68,7 +71,7 @@ export default function AdminDashboardPage() {
   const addMember = async (e) => {
     e.preventDefault();
     await supabase.from('member_wall').insert(newMember);
-    setNewMember({ full_name: '', role_title: '', contribution_note: '', photo_url: '', is_top_volunteer: false });
+    setNewMember({ full_name: '', role_title: '', contribution_note: '', photo_url: '', linkedin_url: '', category: 'member', is_top_volunteer: false });
     reload();
   };
   const addNews = async (e) => {
@@ -79,6 +82,10 @@ export default function AdminDashboardPage() {
   };
   const setMemberStatus = async (id, status) => {
     await supabase.from('member_registrations').update({ status }).eq('id', id);
+    reload();
+  };
+  const setNewsStatus = async (id, status) => {
+    await supabase.from('news_items').update({ status }).eq('id', id);
     reload();
   };
   const remove = async (table, id) => {
@@ -152,6 +159,7 @@ export default function AdminDashboardPage() {
               <option value="upcoming">Upcoming</option>
               <option value="completed">Completed</option>
             </select>
+            <Field placeholder="YouTube Video URL" value={newEvent.video_url} onChange={(e) => setNewEvent({ ...newEvent, video_url: e.target.value })} />
             <textarea placeholder="Description" value={newEvent.description} onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
             <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Event</button>
           </form>
@@ -173,6 +181,28 @@ export default function AdminDashboardPage() {
             <textarea placeholder="Description" value={newNews.description} onChange={(e) => setNewNews({ ...newNews, description: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
             <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add News Item</button>
           </form>
+
+          {pendingNews.length > 0 && (
+            <div>
+              <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500" /> Pending Approval ({pendingNews.length})
+              </h3>
+              {pendingNews.map((n) => (
+                <div key={n.id} className="flex items-center justify-between rounded-xl border p-4 mb-2" style={{ borderColor: 'var(--ias-gold)', background: 'var(--bg)' }}>
+                  <div>
+                    <p className="font-semibold text-sm">{n.title}</p>
+                    <p className="text-xs line-clamp-1" style={{ color: 'var(--text-muted)' }}>{n.description}</p>
+                  </div>
+                  <div className="flex gap-2 shrink-0">
+                    <button onClick={() => setNewsStatus(n.id, 'approved')} className="text-xs font-semibold px-3 py-1.5 rounded-full bg-[var(--ias-green)] text-white cursor-pointer">Approve</button>
+                    <button onClick={() => setNewsStatus(n.id, 'rejected')} className="text-xs font-semibold px-3 py-1.5 rounded-full border text-rose-500 cursor-pointer" style={{ borderColor: 'var(--border)' }}>Reject</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <h3 className="font-semibold text-sm mb-2">Published Articles</h3>
           {news.map((n) => (
             <div key={n.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
               <div><p className="font-semibold text-sm">{n.title}</p><p className="text-xs" style={{ color: 'var(--text-muted)' }}>{n.published_at}</p></div>
@@ -219,15 +249,21 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {tab === 'Member Wall' && (
+      {tab === 'IAS Squad' && (
         <div className="space-y-6">
           <form onSubmit={addMember} className="grid sm:grid-cols-2 gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
             <Field placeholder="Full Name" required value={newMember.full_name} onChange={(e) => setNewMember({ ...newMember, full_name: e.target.value })} />
             <Field placeholder="Role / Title" value={newMember.role_title} onChange={(e) => setNewMember({ ...newMember, role_title: e.target.value })} />
             <Field placeholder="Photo URL" value={newMember.photo_url} onChange={(e) => setNewMember({ ...newMember, photo_url: e.target.value })} />
+            <Field placeholder="LinkedIn URL" value={newMember.linkedin_url} onChange={(e) => setNewMember({ ...newMember, linkedin_url: e.target.value })} />
+            <select value={newMember.category} onChange={(e) => setNewMember({ ...newMember, category: e.target.value })} className="px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}>
+              <option value="member">IAS Member</option>
+              <option value="executive">Executive Committee</option>
+              <option value="volunteer">Volunteer</option>
+            </select>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={newMember.is_top_volunteer} onChange={(e) => setNewMember({ ...newMember, is_top_volunteer: e.target.checked })} />
-              Top Volunteer
+              Top Contributor
             </label>
             <textarea placeholder="Contribution note" value={newMember.contribution_note} onChange={(e) => setNewMember({ ...newMember, contribution_note: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
             <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Member</button>

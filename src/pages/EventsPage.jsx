@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, X } from 'lucide-react';
+import { Calendar, X, Play } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import Reveal from '../components/Reveal';
 
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([^?&/#]+)/);
+  return m ? m[1] : null;
+}
+
 function EventCard({ event, onOpen }) {
+  const ytId = getYouTubeId(event.video_url);
+
   return (
     <button
       onClick={() => onOpen(event)}
-      className="card-hover text-left rounded-2xl overflow-hidden border cursor-pointer"
+      className="card-hover text-left rounded-2xl overflow-hidden border cursor-pointer w-full"
       style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
     >
-      {event.image_url && (
+      {ytId ? (
+        <div className="aspect-video overflow-hidden relative">
+          <img src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} alt={event.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+            <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center">
+              <Play size={20} className="text-[var(--ias-green)] ml-0.5" fill="currentColor" />
+            </div>
+          </div>
+        </div>
+      ) : event.image_url ? (
         <div className="aspect-video overflow-hidden">
           <img src={event.image_url} alt={event.title} className="w-full h-full object-cover" />
         </div>
-      )}
+      ) : null}
       <div className="p-5">
         <p className="text-xs font-mono uppercase tracking-wide mb-1" style={{ color: 'var(--ias-green)' }}>
           {new Date(event.event_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -44,6 +61,7 @@ export default function EventsPage() {
 
   const upcoming = events.filter((e) => e.status === 'upcoming');
   const completed = events.filter((e) => e.status === 'completed');
+  const selectedYtId = getYouTubeId(selected?.video_url);
 
   return (
     <>
@@ -94,10 +112,22 @@ export default function EventsPage() {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelected(null)}>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="max-w-lg w-full rounded-2xl overflow-hidden fade-in-snap"
+            className="max-w-2xl w-full rounded-2xl overflow-hidden fade-in-snap"
             style={{ background: 'var(--bg-elevated)' }}
           >
-            {selected.image_url && <img src={selected.image_url} alt={selected.title} className="w-full aspect-video object-cover" />}
+            {selectedYtId ? (
+              <div className="aspect-video">
+                <iframe
+                  src={`https://www.youtube.com/embed/${selectedYtId}?autoplay=1`}
+                  title={selected.title}
+                  className="w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : selected.image_url ? (
+              <img src={selected.image_url} alt={selected.title} className="w-full aspect-video object-cover" />
+            ) : null}
             <div className="p-6 relative">
               <button onClick={() => setSelected(null)} className="absolute top-4 right-4 cursor-pointer" aria-label="Close">
                 <X size={18} />

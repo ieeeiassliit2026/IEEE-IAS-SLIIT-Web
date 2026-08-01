@@ -3,12 +3,21 @@ import HTMLFlipBook from 'react-pageflip';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabaseClient';
 import MagazineCover from '../assets/magazine/cover.webp';
 import MagazinePdf from '../assets/magazine/magazine.pdf';
 import flipSound from '../assets/magazine/flip.mp3';
 import MagazineHeroImg from '../assets/magazine-hero.png';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
+
+const BUNDLED_EDITION = {
+  id: 'bundled',
+  title: 'IAS Magazine 2024',
+  cover_image_url: MagazineCover,
+  file_url: MagazinePdf,
+  year: 2024,
+};
 
 function Page({ image, pageNumber }, ref) {
   return (
@@ -26,6 +35,8 @@ function Page({ image, pageNumber }, ref) {
 const FlipPage = React.forwardRef(Page);
 
 export default function MagazinePage() {
+  const [editions, setEditions] = useState([BUNDLED_EDITION]);
+  const [selected, setSelected] = useState(BUNDLED_EDITION);
   const [opened, setOpened] = useState(false);
   const [pageImages, setPageImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,14 +45,25 @@ export default function MagazinePage() {
 
   useEffect(() => {
     audioRef.current = new Audio(flipSound);
+    supabase
+      .from('magazine_editions')
+      .select('*')
+      .order('year', { ascending: false })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          setEditions(data);
+          setSelected(data[0]);
+        }
+      });
   }, []);
 
-  const handleOpen = async () => {
+  const handleOpen = async (edition) => {
+    setSelected(edition);
     setOpened(true);
-    if (pageImages.length > 0) return;
+    setPageImages([]);
     setLoading(true);
     try {
-      const pdf = await pdfjsLib.getDocument(MagazinePdf).promise;
+      const pdf = await pdfjsLib.getDocument(edition.file_url).promise;
       const images = [];
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
@@ -89,21 +111,34 @@ export default function MagazinePage() {
 
       <section className="min-h-[70vh] flex flex-col items-center justify-center px-6 py-20">
       {!opened ? (
-        <button onClick={handleOpen} className="group flex flex-col items-center gap-10 cursor-pointer fade-in-snap">
-          <div
-            className="relative w-72 sm:w-80 md:w-96 aspect-[3/4] rounded-2xl overflow-hidden transition-transform duration-700 group-hover:-translate-y-4 group-hover:rotate-1"
-            style={{
-              boxShadow: '0 25px 60px -12px rgba(0,0,0,0.4), 0 10px 30px -8px rgba(5,150,105,0.25)',
-              animation: 'float 4s ease-in-out infinite',
-            }}
-          >
-            <img src={MagazineCover} alt="IAS Magazine" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 ring-1 ring-white/20 rounded-2xl" />
+        <div className="fade-in-snap w-full max-w-4xl">
+          {editions.length > 1 && (
+            <h2 className="font-display text-2xl text-center mb-8">Select an Edition</h2>
+          )}
+          <div className={`flex flex-wrap justify-center ${editions.length > 1 ? 'gap-8' : ''}`}>
+            {editions.map((ed) => (
+              <button
+                key={ed.id}
+                onClick={() => handleOpen(ed)}
+                className="group flex flex-col items-center gap-4 cursor-pointer"
+              >
+                <div
+                  className="relative w-56 sm:w-64 aspect-[3/4] rounded-2xl overflow-hidden transition-transform duration-700 group-hover:-translate-y-4 group-hover:rotate-1"
+                  style={{
+                    boxShadow: '0 25px 60px -12px rgba(0,0,0,0.4), 0 10px 30px -8px rgba(0,150,77,0.25)',
+                    animation: 'float 4s ease-in-out infinite',
+                  }}
+                >
+                  <img src={ed.cover_image_url || MagazineCover} alt={ed.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 ring-1 ring-white/20 rounded-2xl" />
+                </div>
+                <span className="btn-shimmer inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--ias-green)] text-white text-sm font-semibold">
+                  <BookOpen size={16} /> {ed.title || `Edition ${ed.year}`}
+                </span>
+              </button>
+            ))}
           </div>
-          <span className="btn-shimmer inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--ias-green)] text-white text-base font-semibold">
-            <BookOpen size={18} /> Pick Up the Magazine
-          </span>
-        </button>
+        </div>
       ) : loading ? (
         <div className="flex flex-col items-center gap-3 fade-in-snap">
           <Loader2 className="animate-spin" size={28} style={{ color: 'var(--ias-green)' }} />
@@ -111,6 +146,15 @@ export default function MagazinePage() {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-6 fade-in-snap w-full">
+          {editions.length > 1 && (
+            <button
+              onClick={() => { setOpened(false); setPageImages([]); }}
+              className="text-xs font-mono uppercase tracking-wide link-underline cursor-pointer mb-2"
+              style={{ color: 'var(--ias-green)' }}
+            >
+              ← All Editions
+            </button>
+          )}
           <HTMLFlipBook
             ref={bookRef}
             width={340}
@@ -138,7 +182,7 @@ export default function MagazinePage() {
             >
               <ChevronLeft size={16} />
             </button>
-            <a href={MagazinePdf} target="_blank" rel="noreferrer" className="text-xs font-mono uppercase tracking-wide link-underline" style={{ color: 'var(--ias-green)' }}>
+            <a href={selected.file_url} target="_blank" rel="noreferrer" className="text-xs font-mono uppercase tracking-wide link-underline" style={{ color: 'var(--ias-green)' }}>
               Download PDF
             </a>
             <button

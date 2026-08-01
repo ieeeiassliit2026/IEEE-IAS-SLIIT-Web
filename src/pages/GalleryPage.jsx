@@ -6,6 +6,14 @@ import Reveal from '../components/Reveal';
 import HeroBg from '../assets/galleryHero.png';
 import { committeeMembers } from '../data/committee';
 
+function SkeletonCard({ style }) {
+  return (
+    <div className="mb-3 break-inside-avoid rounded-sm overflow-hidden shimmer-skeleton" style={style}>
+      <div className="w-full bg-[var(--border)]" style={{ aspectRatio: style?.aspectRatio || '4/3' }} />
+    </div>
+  );
+}
+
 export default function GalleryPage() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +30,6 @@ export default function GalleryPage() {
       });
   }, []);
 
-  // Close the lightbox on Escape, matching the click-to-dismiss overlay.
   useEffect(() => {
     if (!lightbox) return;
     const onKey = (e) => e.key === 'Escape' && setLightbox(null);
@@ -58,34 +65,40 @@ export default function GalleryPage() {
 
         <Reveal><h2 className="font-display text-2xl mb-6 text-center">Event Photos</h2></Reveal>
         {loading ? (
-          <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>Loading gallery...</p>
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3">
+            {[...Array(9)].map((_, i) => (
+              <SkeletonCard key={i} style={{ aspectRatio: i % 3 === 0 ? '3/4' : i % 3 === 1 ? '4/3' : '1/1' }} />
+            ))}
+          </div>
         ) : images.length === 0 ? (
           <div className="text-center py-16 rounded-2xl border" style={{ borderColor: 'var(--border)' }}>
             <ImageIcon className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
             <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No event photos uploaded yet.</p>
           </div>
         ) : (
-          /* CSS masonry columns, as CS's gallery does */
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-3">
-            {images.map((img) => (
-              <button
-                key={img.id}
-                onClick={() => setLightbox(img)}
-                className="mb-3 block w-full cursor-pointer transition duration-300 hover:brightness-75 break-inside-avoid"
-              >
-                <img
-                  src={img.image_url}
-                  alt={img.caption || ''}
-                  className="w-full rounded-sm shadow-md"
-                  style={{ border: '2px solid var(--ias-green)' }}
-                />
-                {(img.caption || img.photographer) && (
-                  <span className="flex items-center justify-between gap-2 pt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                    <span className="truncate">{img.caption}</span>
-                    {img.photographer && <span className="shrink-0">📷 {img.photographer}</span>}
-                  </span>
-                )}
-              </button>
+            {images.map((img, i) => (
+              <Reveal key={img.id} delay={i * 60} direction="scale">
+                <button
+                  onClick={() => setLightbox(img)}
+                  className="mb-3 block w-full cursor-pointer break-inside-avoid group relative overflow-hidden rounded-sm"
+                >
+                  <img
+                    src={img.image_url}
+                    alt={img.caption || ''}
+                    className="w-full shadow-md transition-transform duration-500 group-hover:scale-105"
+                    style={{ border: '2px solid var(--ias-green)' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                    {(img.caption || img.photographer) && (
+                      <span className="flex items-center justify-between gap-2 w-full text-[11px] text-white/90">
+                        <span className="truncate">{img.caption}</span>
+                        {img.photographer && <span className="shrink-0">📷 {img.photographer}</span>}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              </Reveal>
             ))}
           </div>
         )}
