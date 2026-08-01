@@ -1,4 +1,4 @@
- import React, { useEffect } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -27,32 +27,64 @@ function ScrollToTop() {
   return null;
 }
 
+function PageTransition({ children }) {
+  const location = useLocation();
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [transitionStage, setTransitionStage] = useState('enter');
+
+  useEffect(() => {
+    if (location.pathname !== displayLocation.pathname) {
+      setTransitionStage('exit');
+    }
+  }, [location, displayLocation]);
+
+  const handleAnimationEnd = () => {
+    if (transitionStage === 'exit') {
+      setDisplayLocation(location);
+      setTransitionStage('enter');
+    }
+  };
+
+  return (
+    <div
+      className={`page-transition page-${transitionStage}`}
+      onAnimationEnd={handleAnimationEnd}
+    >
+      {children(displayLocation)}
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
       <Navbar />
       <main className="flex-1 lg:pt-[68px]">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/team" element={<TeamPage />} />
-          <Route path="/community" element={<CommunityDetailsPage />} />
-          <Route path="/events" element={<EventsPage />} />
-          <Route path="/upcoming" element={<UpcomingEventsPage />} />
-          <Route path="/past" element={<PastEventsPage />} />
-          <Route path="/news" element={<NewsPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/newsletter" element={<NewsletterPage />} />
-          <Route path="/members" element={<MemberWallPage />} />
-          <Route path="/magazine" element={<MagazinePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route path="/admin" element={<AdminDashboardPage />} />
-        </Routes>
+        <PageTransition>
+          {(location) => (
+            <Routes location={location}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/team" element={<TeamPage />} />
+              <Route path="/community" element={<CommunityDetailsPage />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route path="/upcoming" element={<UpcomingEventsPage />} />
+              <Route path="/past" element={<PastEventsPage />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/newsletter" element={<NewsletterPage />} />
+              <Route path="/members" element={<MemberWallPage />} />
+              <Route path="/magazine" element={<MagazinePage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/admin/login" element={<AdminLoginPage />} />
+              <Route path="/admin" element={<AdminDashboardPage />} />
+            </Routes>
+          )}
+        </PageTransition>
       </main>
       <Footer />
     </div>
