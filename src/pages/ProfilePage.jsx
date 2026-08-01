@@ -33,7 +33,7 @@ export default function ProfilePage() {
   return (
     <>
       <section className="max-w-md mx-auto px-6 py-16 sm:py-24 text-center">
-        <img src={IASLogo} alt="IEEE IAS SLIIT" className="h-14 w-auto object-contain mx-auto mb-8" />
+        <img src={IASLogo} alt="IEEE IAS SLIIT" className="h-14 w-auto object-contain mx-auto mb-8 logo-theme" />
         {loading ? (
           <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Loading...</p>
         ) : !profile ? (

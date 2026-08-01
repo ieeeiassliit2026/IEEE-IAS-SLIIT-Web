@@ -38,7 +38,7 @@ export default function RegisterPage() {
     <>
       <section className="max-w-md mx-auto px-6 py-16 sm:py-24">
         <div className="flex flex-col items-center mb-8">
-          <img src={IASLogo} alt="IEEE IAS SLIIT" className="h-14 w-auto object-contain mb-4" />
+          <img src={IASLogo} alt="IEEE IAS SLIIT" className="h-14 w-auto object-contain mb-4 logo-theme" />
           <h1 className="font-display text-2xl">Registration</h1>
         </div>
 
