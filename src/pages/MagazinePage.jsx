@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
-import { BookOpen, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import Loader from '../components/Loader';
 import { supabase } from '../lib/supabaseClient';
 import MagazineCover from '../assets/magazine/cover.webp';
 import MagazinePdf from '../assets/magazine/magazine.pdf';
@@ -140,10 +141,7 @@ export default function MagazinePage() {
           </div>
         </div>
       ) : loading ? (
-        <div className="flex flex-col items-center gap-3 fade-in-snap">
-          <Loader2 className="animate-spin" size={28} style={{ color: 'var(--ias-green)' }} />
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Opening the magazine...</p>
-        </div>
+        <Loader text="Opening the magazine..." />
       ) : (
         <div className="flex flex-col items-center gap-6 fade-in-snap w-full">
           {editions.length > 1 && (

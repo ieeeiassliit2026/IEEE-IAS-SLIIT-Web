@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, X, Play } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loader from '../components/Loader';
 import Reveal from '../components/Reveal';
 
 function getYouTubeId(url) {
@@ -79,7 +80,7 @@ export default function EventsPage() {
 
       <section className="max-w-6xl mx-auto px-6 py-16">
       {loading ? (
-        <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>Loading events...</p>
+        <Loader text="Loading events..." />
       ) : events.length === 0 ? (
         <div className="text-center py-16 rounded-2xl border" style={{ borderColor: 'var(--border)' }}>
           <Calendar className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />

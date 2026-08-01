@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Newspaper, PenLine, Send } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
+import Loader from '../components/Loader';
 import { useAuth } from '../lib/AuthContext';
 import ImageHero from '../components/ImageHero';
 import FeatureCard from '../components/FeatureCard';
@@ -99,17 +100,7 @@ export default function NewsPage() {
         {session && <SubmitArticleForm onSubmitted={loadNews} />}
 
         {loading ? (
-          <div className="grid sm:grid-cols-2 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="shimmer-skeleton rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
-                <div style={{ aspectRatio: '16/9' }} />
-                <div className="p-5 space-y-2">
-                  <div className="h-4 rounded" style={{ width: '60%' }}><div className="w-full h-full" /></div>
-                  <div className="h-3 rounded" style={{ width: '90%' }}><div className="w-full h-full" /></div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Loader text="Loading articles..." />
         ) : items.length === 0 ? (
           <div className="text-center py-16 rounded-2xl border" style={{ borderColor: 'var(--border)' }}>
             <Newspaper className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Star, Users } from 'lucide-react';
 import { LinkedinIcon } from '../components/BrandIcons';
 import { supabase } from '../lib/supabaseClient';
+import Loader from '../components/Loader';
 import BandHero from '../components/BandHero';
 import Reveal from '../components/Reveal';
 import HeroImg from '../assets/bg.jpg';
@@ -113,7 +114,7 @@ export default function MemberWallPage() {
         </div>
 
         {loading ? (
-          <p className="text-center text-sm" style={{ color: 'var(--text-muted)' }}>Loading members...</p>
+          <Loader text="Loading members..." />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16 rounded-2xl border" style={{ borderColor: 'var(--border)' }}>
             <Users className="mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
