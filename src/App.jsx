@@ -1,5 +1,5 @@
  import React, { useEffect, useState } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -9,7 +9,6 @@ import CommunityDetailsPage from './pages/CommunityDetailsPage';
 import EventsPage from './pages/EventsPage';
 import UpcomingEventsPage from './pages/UpcomingEventsPage';
 import PastEventsPage from './pages/PastEventsPage';
-import NewsPage from './pages/NewsPage';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
 import NewsletterPage from './pages/NewsletterPage';
@@ -71,7 +70,7 @@ export default function App() {
               <Route path="/events" element={<EventsPage />} />
               <Route path="/upcoming" element={<UpcomingEventsPage />} />
               <Route path="/past" element={<PastEventsPage />} />
-              <Route path="/news" element={<NewsPage />} />
+              <Route path="/news" element={<Navigate to="/newsletter" replace />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/newsletter" element={<NewsletterPage />} />

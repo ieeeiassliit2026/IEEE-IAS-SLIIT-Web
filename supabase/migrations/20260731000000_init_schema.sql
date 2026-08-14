@@ -1,5 +1,5 @@
 -- ============================================================
--- IEEE IAS SLIIT — Website schema
+-- IEEE IAS SLIIT - Website schema
 -- Contact form, newsletter, events, gallery, member wall, admin auth
 -- ============================================================
 
@@ -43,7 +43,7 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
--- 2. Contact form submissions (contains PII — public can INSERT, only admins can SELECT)
+-- 2. Contact form submissions (contains PII - public can INSERT, only admins can SELECT)
 CREATE TABLE public.contact_submissions (
   id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name       TEXT NOT NULL CHECK (length(trim(name)) > 0),
@@ -65,7 +65,7 @@ CREATE POLICY "Only admins can read contact messages" ON public.contact_submissi
 CREATE POLICY "Only admins can update contact messages" ON public.contact_submissions
   FOR UPDATE USING (public.is_admin()) WITH CHECK (public.is_admin());
 
--- 3. Newsletter subscribers (email capture — public INSERT only, admin-read)
+-- 3. Newsletter subscribers (email capture - public INSERT only, admin-read)
 CREATE TABLE public.newsletter_subscribers (
   id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email         TEXT NOT NULL UNIQUE CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
@@ -80,7 +80,7 @@ CREATE POLICY "Anyone can subscribe" ON public.newsletter_subscribers
 CREATE POLICY "Only admins can view subscriber list" ON public.newsletter_subscribers
   FOR SELECT USING (public.is_admin());
 
--- 4. Newsletter issues (published editions — public read, admin write)
+-- 4. Newsletter issues (published editions - public read, admin write)
 CREATE TABLE public.newsletter_issues (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title        TEXT NOT NULL CHECK (length(trim(title)) > 0),
@@ -99,7 +99,7 @@ CREATE POLICY "Public can view newsletter issues" ON public.newsletter_issues
 CREATE POLICY "Admins can manage newsletter issues" ON public.newsletter_issues
   FOR ALL USING (public.is_admin()) WITH CHECK (public.is_admin());
 
--- 5. Events (ongoing/past — public read, admin write)
+-- 5. Events (ongoing/past - public read, admin write)
 CREATE TABLE public.events (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title       TEXT NOT NULL CHECK (length(trim(title)) > 0),
@@ -136,7 +136,7 @@ CREATE POLICY "Public can view gallery" ON public.gallery_images
 CREATE POLICY "Admins can manage gallery" ON public.gallery_images
   FOR ALL USING (public.is_admin()) WITH CHECK (public.is_admin());
 
--- 7. Member wall (registered members + volunteer recognition — public read, admin write)
+-- 7. Member wall (registered members + volunteer recognition - public read, admin write)
 CREATE TABLE public.member_wall (
   id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   full_name          TEXT NOT NULL CHECK (length(trim(full_name)) > 0),

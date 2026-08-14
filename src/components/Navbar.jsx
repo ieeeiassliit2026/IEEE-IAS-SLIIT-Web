@@ -12,7 +12,7 @@ const LINKS = [
   { to: '/gallery', label: 'Gallery' },
   { to: '/community', label: 'Community' },
   { to: '/events', label: 'Events' },
-  { to: '/news', label: 'News' },
+  { to: '/newsletter', label: 'Newsletter' },
   { to: '/magazine', label: 'Magazine' },
 ];
 

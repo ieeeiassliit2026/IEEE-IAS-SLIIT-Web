@@ -3,7 +3,7 @@
 -- Mirrors the CS site's register → pending → admin-activate flow
 -- ============================================================
 
--- 1. Member registrations (public self-registered members — NOT admins)
+-- 1. Member registrations (public self-registered members - NOT admins)
 CREATE TABLE public.member_registrations (
   id         UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name  TEXT NOT NULL CHECK (length(trim(full_name)) > 0),
@@ -45,7 +45,7 @@ BEGIN
 END;
 $$;
 
--- 2. News items (announcements distinct from events — public read, admin write)
+-- 2. News items (announcements distinct from events - public read, admin write)
 CREATE TABLE public.news_items (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title        TEXT NOT NULL CHECK (length(trim(title)) > 0),

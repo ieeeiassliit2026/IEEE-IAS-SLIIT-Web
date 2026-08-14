@@ -16,7 +16,7 @@ const NEWS_LINKS = [
   { to: '/events', label: 'Events' },
   { to: '/upcoming', label: 'Upcoming Events' },
   { to: '/past', label: 'Past Events' },
-  { to: '/news', label: 'News' },
+  { to: '/newsletter', label: 'Newsletter' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/magazine', label: 'Magazine' },
 ];

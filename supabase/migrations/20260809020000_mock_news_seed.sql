@@ -1,5 +1,5 @@
 -- ============================================================
--- Mock seed data for news_items — placeholder content, replace before launch.
+-- Mock seed data for news_items - placeholder content, replace before launch.
 -- ============================================================
 
 INSERT INTO public.news_items (title, description, image_url, published_at) VALUES

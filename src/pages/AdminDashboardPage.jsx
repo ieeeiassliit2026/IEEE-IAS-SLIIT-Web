@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
 
-const TABS = ['Contact Messages', 'Pending Members', 'Events', 'News', 'Gallery', 'Newsletter Issues', 'IAS Squad'];
+const TABS = ['Contact Messages', 'Pending Members', 'Events', 'Articles', 'Gallery', 'Newsletter Issues', 'Magazine', 'IAS Squad'];
 
 function Field(props) {
   return (
@@ -24,9 +24,11 @@ export default function AdminDashboardPage() {
   const [gallery, setGallery] = useState([]);
   const [issues, setIssues] = useState([]);
   const [members, setMembers] = useState([]);
+  const [editions, setEditions] = useState([]);
 
   const [newEvent, setNewEvent] = useState({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '', video_url: '' });
-  const [newNews, setNewNews] = useState({ title: '', description: '', image_url: '', published_at: '' });
+  const [newNews, setNewNews] = useState({ title: '', description: '', image_url: '', published_at: '', author_name: '', author_title: '' });
+  const [newEdition, setNewEdition] = useState({ title: '', year: String(new Date().getFullYear()), cover_image_url: '', file_url: '' });
   const [newImage, setNewImage] = useState({ image_url: '', caption: '' });
   const [newIssue, setNewIssue] = useState({ title: '', description: '', file_url: '', cover_image_url: '', published_at: '' });
   const [newMember, setNewMember] = useState({ full_name: '', role_title: '', contribution_note: '', photo_url: '', linkedin_url: '', category: 'member', is_top_volunteer: false });
@@ -43,6 +45,7 @@ export default function AdminDashboardPage() {
     supabase.from('gallery_images').select('*').order('created_at', { ascending: false }).then(({ data }) => setGallery(data || []));
     supabase.from('newsletter_issues').select('*').order('published_at', { ascending: false }).then(({ data }) => setIssues(data || []));
     supabase.from('member_wall').select('*').order('created_at', { ascending: false }).then(({ data }) => setMembers(data || []));
+    supabase.from('magazine_editions').select('*').order('year', { ascending: false }).then(({ data }) => setEditions(data || []));
   };
 
   useEffect(() => { if (isAdmin) reload(); }, [isAdmin]);
@@ -86,7 +89,12 @@ export default function AdminDashboardPage() {
   const addNews = async (e) => {
     e.preventDefault();
     if (await run(supabase.from('news_items').insert(clean(newNews))))
-      setNewNews({ title: '', description: '', image_url: '', published_at: '' });
+      setNewNews({ title: '', description: '', image_url: '', published_at: '', author_name: '', author_title: '' });
+  };
+  const addEdition = async (e) => {
+    e.preventDefault();
+    if (await run(supabase.from('magazine_editions').insert(clean({ ...newEdition, year: Number(newEdition.year) }))))
+      setNewEdition({ title: '', year: String(new Date().getFullYear()), cover_image_url: '', file_url: '' });
   };
   const setMemberStatus = async (id, status) => {
     await run(supabase.from('member_registrations').update({ status }).eq('id', id));
@@ -179,14 +187,16 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {tab === 'News' && (
+      {tab === 'Articles' && (
         <div className="space-y-6">
           <form onSubmit={addNews} className="grid sm:grid-cols-2 gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
             <Field placeholder="Title" required value={newNews.title} onChange={(e) => setNewNews({ ...newNews, title: e.target.value })} />
             <Field type="date" required value={newNews.published_at} onChange={(e) => setNewNews({ ...newNews, published_at: e.target.value })} />
             <Field placeholder="Image URL" value={newNews.image_url} onChange={(e) => setNewNews({ ...newNews, image_url: e.target.value })} />
+            <Field placeholder="Author name (optional)" maxLength={100} value={newNews.author_name} onChange={(e) => setNewNews({ ...newNews, author_name: e.target.value })} />
+            <Field placeholder="Author role / organisation (optional)" maxLength={150} value={newNews.author_title} onChange={(e) => setNewNews({ ...newNews, author_title: e.target.value })} />
             <textarea placeholder="Description" value={newNews.description} onChange={(e) => setNewNews({ ...newNews, description: e.target.value })} className="sm:col-span-2 px-3 py-2 rounded-lg border text-sm" style={{ borderColor: 'var(--border)', background: 'var(--bg)' }} />
-            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add News Item</button>
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Article</button>
           </form>
 
           {pendingNews.length > 0 && (
@@ -198,6 +208,7 @@ export default function AdminDashboardPage() {
                 <div key={n.id} className="flex items-center justify-between rounded-xl border p-4 mb-2" style={{ borderColor: 'var(--ias-gold)', background: 'var(--bg)' }}>
                   <div>
                     <p className="font-semibold text-sm">{n.title}</p>
+                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{[n.author_name, n.author_title].filter(Boolean).join(' · ')}</p>
                     <p className="text-xs line-clamp-1" style={{ color: 'var(--text-muted)' }}>{n.description}</p>
                   </div>
                   <div className="flex gap-2 shrink-0">
@@ -251,6 +262,24 @@ export default function AdminDashboardPage() {
             <div key={i.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
               <p className="font-semibold text-sm">{i.title}</p>
               <button onClick={() => remove('newsletter_issues', i.id)} className="text-xs text-rose-500 cursor-pointer">Delete</button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'Magazine' && (
+        <div className="space-y-6">
+          <form onSubmit={addEdition} className="grid sm:grid-cols-2 gap-3 rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
+            <Field placeholder="Edition title (e.g. IAS Magazine 2026)" required value={newEdition.title} onChange={(e) => setNewEdition({ ...newEdition, title: e.target.value })} />
+            <Field type="number" min="2000" max="2100" required value={newEdition.year} onChange={(e) => setNewEdition({ ...newEdition, year: e.target.value })} />
+            <Field placeholder="Cover Image URL" value={newEdition.cover_image_url} onChange={(e) => setNewEdition({ ...newEdition, cover_image_url: e.target.value })} />
+            <Field placeholder="File URL (PDF)" required value={newEdition.file_url} onChange={(e) => setNewEdition({ ...newEdition, file_url: e.target.value })} />
+            <button type="submit" className="sm:col-span-2 py-2 rounded-lg bg-[var(--ias-green)] text-white text-sm font-semibold cursor-pointer">Add Edition</button>
+          </form>
+          {editions.map((ed) => (
+            <div key={ed.id} className="flex items-center justify-between rounded-xl border p-4" style={{ borderColor: 'var(--border)' }}>
+              <div><p className="font-semibold text-sm">{ed.title}</p><p className="text-xs" style={{ color: 'var(--text-muted)' }}>{ed.year}</p></div>
+              <button onClick={() => remove('magazine_editions', ed.id)} className="text-xs text-rose-500 cursor-pointer">Delete</button>
             </div>
           ))}
         </div>
