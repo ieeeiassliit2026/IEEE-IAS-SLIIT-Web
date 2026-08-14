@@ -15,7 +15,7 @@ function Field(props) {
 }
 
 export default function AdminDashboardPage() {
-  const { session, signOut } = useAuth();
+  const { session, isAdmin, signOut } = useAuth();
   const [tab, setTab] = useState(TABS[0]);
   const [contacts, setContacts] = useState([]);
   const [pendingMembers, setPendingMembers] = useState([]);
@@ -32,65 +32,70 @@ export default function AdminDashboardPage() {
   const [newMember, setNewMember] = useState({ full_name: '', role_title: '', contribution_note: '', photo_url: '', linkedin_url: '', category: 'member', is_top_volunteer: false });
 
   const [pendingNews, setPendingNews] = useState([]);
+  const [notice, setNotice] = useState('');
 
   const reload = () => {
     supabase.from('contact_submissions').select('*').order('created_at', { ascending: false }).then(({ data }) => setContacts(data || []));
     supabase.from('member_registrations').select('*').eq('status', 'pending').order('created_at', { ascending: false }).then(({ data }) => setPendingMembers(data || []));
     supabase.from('events').select('*').order('event_date', { ascending: false }).then(({ data }) => setEvents(data || []));
-    supabase.from('news_items').select('*').or('status.is.null,status.eq.approved').order('published_at', { ascending: false }).then(({ data }) => setNews(data || []));
+    supabase.from('news_items').select('*').eq('status', 'approved').order('published_at', { ascending: false }).then(({ data }) => setNews(data || []));
     supabase.from('news_items').select('*').eq('status', 'pending').order('published_at', { ascending: false }).then(({ data }) => setPendingNews(data || []));
     supabase.from('gallery_images').select('*').order('created_at', { ascending: false }).then(({ data }) => setGallery(data || []));
     supabase.from('newsletter_issues').select('*').order('published_at', { ascending: false }).then(({ data }) => setIssues(data || []));
     supabase.from('member_wall').select('*').order('created_at', { ascending: false }).then(({ data }) => setMembers(data || []));
   };
 
-  useEffect(() => { if (session) reload(); }, [session]);
+  useEffect(() => { if (isAdmin) reload(); }, [isAdmin]);
 
   if (!session) {
     return <div className="max-w-md mx-auto px-6 py-20 text-center"><p style={{ color: 'var(--text-muted)' }}>Please log in to view the admin dashboard.</p></div>;
   }
+  if (!isAdmin) {
+    return <div className="max-w-md mx-auto px-6 py-20 text-center"><p style={{ color: 'var(--text-muted)' }}>This account does not have admin access.</p></div>;
+  }
+
+  // Empty form fields are omitted so DB defaults/NULLs apply (URL CHECKs reject '').
+  const clean = (o) => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== ''));
+  const run = async (query) => {
+    const { error } = await query;
+    setNotice(error ? error.message : '');
+    reload();
+    return !error;
+  };
 
   const addEvent = async (e) => {
     e.preventDefault();
-    await supabase.from('events').insert(newEvent);
-    setNewEvent({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '', video_url: '' });
-    reload();
+    if (await run(supabase.from('events').insert(clean(newEvent))))
+      setNewEvent({ title: '', description: '', event_date: '', event_type: 'workshop', status: 'upcoming', image_url: '', video_url: '' });
   };
   const addImage = async (e) => {
     e.preventDefault();
-    await supabase.from('gallery_images').insert(newImage);
-    setNewImage({ image_url: '', caption: '' });
-    reload();
+    if (await run(supabase.from('gallery_images').insert(clean(newImage))))
+      setNewImage({ image_url: '', caption: '' });
   };
   const addIssue = async (e) => {
     e.preventDefault();
-    await supabase.from('newsletter_issues').insert(newIssue);
-    setNewIssue({ title: '', description: '', file_url: '', cover_image_url: '', published_at: '' });
-    reload();
+    if (await run(supabase.from('newsletter_issues').insert(clean(newIssue))))
+      setNewIssue({ title: '', description: '', file_url: '', cover_image_url: '', published_at: '' });
   };
   const addMember = async (e) => {
     e.preventDefault();
-    await supabase.from('member_wall').insert(newMember);
-    setNewMember({ full_name: '', role_title: '', contribution_note: '', photo_url: '', linkedin_url: '', category: 'member', is_top_volunteer: false });
-    reload();
+    if (await run(supabase.from('member_wall').insert(clean(newMember))))
+      setNewMember({ full_name: '', role_title: '', contribution_note: '', photo_url: '', linkedin_url: '', category: 'member', is_top_volunteer: false });
   };
   const addNews = async (e) => {
     e.preventDefault();
-    await supabase.from('news_items').insert(newNews);
-    setNewNews({ title: '', description: '', image_url: '', published_at: '' });
-    reload();
+    if (await run(supabase.from('news_items').insert(clean(newNews))))
+      setNewNews({ title: '', description: '', image_url: '', published_at: '' });
   };
   const setMemberStatus = async (id, status) => {
-    await supabase.from('member_registrations').update({ status }).eq('id', id);
-    reload();
+    await run(supabase.from('member_registrations').update({ status }).eq('id', id));
   };
   const setNewsStatus = async (id, status) => {
-    await supabase.from('news_items').update({ status }).eq('id', id);
-    reload();
+    await run(supabase.from('news_items').update({ status }).eq('id', id));
   };
   const remove = async (table, id) => {
-    await supabase.from(table).delete().eq('id', id);
-    reload();
+    await run(supabase.from(table).delete().eq('id', id));
   };
 
   return (
@@ -101,6 +106,8 @@ export default function AdminDashboardPage() {
           Sign Out
         </button>
       </div>
+
+      {notice && <p role="alert" className="text-xs text-rose-500 mb-4">{notice}</p>}
 
       <div className="flex gap-2 flex-wrap mb-8 border-b" style={{ borderColor: 'var(--border)' }}>
         {TABS.map((t) => (

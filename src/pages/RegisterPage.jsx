@@ -65,7 +65,7 @@ export default function RegisterPage() {
               style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}
             />
             <input
-              type="password" placeholder="Password" required value={form.password}
+              type="password" placeholder="Password (min 8 characters)" required minLength={8} autoComplete="new-password" value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               className="w-full px-4 py-3 rounded-xl border text-sm outline-none focus:border-[var(--ias-green)]"
               style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}

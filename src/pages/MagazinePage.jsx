@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import HTMLFlipBook from 'react-pageflip';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
-import { BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import { BookOpen, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import Loader from '../components/Loader';
 import { supabase } from '../lib/supabaseClient';
 import MagazineCover from '../assets/magazine/cover.webp';

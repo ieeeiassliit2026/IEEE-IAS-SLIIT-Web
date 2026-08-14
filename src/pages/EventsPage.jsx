@@ -6,7 +6,7 @@ import Reveal from '../components/Reveal';
 
 function getYouTubeId(url) {
   if (!url) return null;
-  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([^?&/#]+)/);
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([\w-]{11})(?:[?&/#]|$)/);
   return m ? m[1] : null;
 }
 

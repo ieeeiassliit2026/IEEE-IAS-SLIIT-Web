@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 
 export default function AdminLoginPage() {
-  const { signIn } = useAuth();
+  const { signIn, signOut } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,9 +16,19 @@ export default function AdminLoginPage() {
     setError('');
     setLoading(true);
     const { error } = await signIn(email, password);
+    if (error) {
+      setLoading(false);
+      setError(error.message);
+      return;
+    }
+    const { data: admin } = await supabase.rpc('is_admin');
     setLoading(false);
-    if (error) setError(error.message);
-    else navigate('/admin');
+    if (admin !== true) {
+      await signOut();
+      setError('This account does not have admin access.');
+      return;
+    }
+    navigate('/admin');
   };
 
   return (
