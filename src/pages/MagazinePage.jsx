@@ -64,7 +64,7 @@ export default function MagazinePage() {
     setPageImages([]);
     setLoading(true);
     try {
-      const pdf = await pdfjsLib.getDocument(edition.file_url).promise;
+      const pdf = await pdfjsLib.getDocument({ url: edition.file_url }).promise;
       const images = [];
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
