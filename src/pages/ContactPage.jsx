@@ -84,12 +84,12 @@ export default function ContactPage() {
       {/* ── Let's Talk! ── */}
       <section className="py-16 px-6" style={{ background: 'var(--ias-navy)', color: '#fff' }}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-display text-4xl mb-2">Let's <span style={{ color: 'var(--ias-green)' }}>Talk!</span></h2>
-          <p className="text-sm text-white/60 mb-8">Share your thoughts and help us get in touch — or simply say hi!</p>
-
-          <div className="grid lg:grid-cols-2 gap-10">
+          <div className="grid lg:grid-cols-2 gap-10 lg:items-center">
             <Reveal direction="left">
             <div>
+              <h2 className="font-display text-4xl mb-2">Let's <span style={{ color: 'var(--ias-green)' }}>Talk!</span></h2>
+              <p className="text-sm text-white/60 mb-8">Share your thoughts and help us get in touch — or simply say hi!</p>
+
               <div className="flex items-center gap-4 mb-8">
                 <a href="https://www.linkedin.com/company/ieee-industry-applications-society-of-sliit/" target="_blank" rel="noreferrer" aria-label="LinkedIn" className="hover:text-[var(--ias-green)] transition-colors">
                   <LinkedinIcon size={20} />
