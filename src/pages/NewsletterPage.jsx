@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Download, Mail, Newspaper, PenLine, Send } from 'lucide-react';
+import { Mail, Newspaper, PenLine, Send } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../lib/AuthContext';
 import ImageHero from '../components/ImageHero';
@@ -12,14 +12,6 @@ const PAGE_SIZE = 6;
 const fmtDate = (d) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 // ---------- Skeletons (shimmer-skeleton styles every direct child <div>) ----------
-function HeroSkeleton() {
-  return (
-    <div className="shimmer-skeleton h-[55vh] lg:-mt-[68px]" aria-hidden="true">
-      <div className="h-full w-full" />
-    </div>
-  );
-}
-
 function CardSkeleton() {
   return (
     <div className="rounded-2xl border overflow-hidden" style={{ borderColor: 'var(--border)' }} aria-hidden="true">
@@ -167,7 +159,6 @@ function SubmitArticle() {
 
 export default function NewsletterPage() {
   const [issues, setIssues] = useState([]);
-  const [issuesLoading, setIssuesLoading] = useState(true);
   const [articles, setArticles] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -181,7 +172,6 @@ export default function NewsletterPage() {
       .order('published_at', { ascending: false })
       .then(({ data }) => {
         setIssues(data || []);
-        setIssuesLoading(false);
       });
   }, []);
 
@@ -207,24 +197,11 @@ export default function NewsletterPage() {
     listRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const latest = issues[0];
-  const previous = issues.slice(1);
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <>
-      {/* Dynamic hero: always the single latest issue */}
-      {issuesLoading ? (
-        <HeroSkeleton />
-      ) : latest ? (
-        <ImageHero image={latest.cover_image_url || HeroBg} height="h-[55vh]" title={latest.title} subtitle={latest.description || `Latest issue · ${fmtDate(latest.published_at)}`}>
-          <a href={latest.file_url} target="_blank" rel="noreferrer" className="btn-shimmer inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--ias-green)] text-white text-sm font-semibold">
-            <Download size={16} /> Read the latest issue
-          </a>
-        </ImageHero>
-      ) : (
-        <ImageHero image={HeroBg} height="h-[55vh]" title="Newsletter" subtitle="Articles, announcements, and updates from IEEE IAS SLIIT." />
-      )}
+      <ImageHero image={issues[0]?.cover_image_url || HeroBg} height="h-[55vh]" title="Newsletter" subtitle="Articles, announcements, and updates from IEEE IAS SLIIT." />
 
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div ref={listRef} className="scroll-mt-24" />
@@ -249,11 +226,11 @@ export default function NewsletterPage() {
         )}
         <Pagination page={page} pages={pages} onChange={goTo} />
 
-        {previous.length > 0 && (
+        {issues.length > 0 && (
           <div className="mt-20">
-            <h2 className="font-display text-2xl mb-6">Previous Issues</h2>
+            <h2 className="font-display text-2xl mb-6">Issues</h2>
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {previous.map((issue, i) => (
+              {issues.map((issue, i) => (
                 <Reveal key={issue.id} delay={i * 100} direction="scale">
                   <div className="card-hover rounded-2xl overflow-hidden border" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)' }}>
                     {issue.cover_image_url && (
